@@ -13,7 +13,7 @@
     <title>Data Display Test</title>
 </head>
 <body>
-<h1>Student</h1>
+<h1>Pushing works!</h1>
 <p>Fuck me it's <s:property value="student.username" />!</p>
 <ul>
     <li><s:property value="student.firstName"></s:property></li>
