@@ -1,0 +1,12 @@
+<Context>
+    <Resource
+            name="testConnection"
+            type="javax.sql.DataSource"
+            maxActive="10"
+            maxIdle="5"
+            username="user1"
+            password="comp1140isBAE"
+            driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+            url="jdbc:sqlserver://localhost\SQLEXPRESS;databaseName=seng2050_test"
+    />
+</Context>
