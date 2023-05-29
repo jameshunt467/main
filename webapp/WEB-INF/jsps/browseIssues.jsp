@@ -16,26 +16,27 @@
               list="{'issueID', 'title', 'category', 'status', 'description', 'resolutionDetails', 'dateTimeReported', 'dateTimeResolved'}"
               headerKey="" headerValue="Select"/>
     <s:textfield name="searchTerm" label="Search Term"/>
-    <s:submit value="Sort" />
+    <s:submit value="Sort"/>
 </s:form>
-
-
 
 
 <s:iterator value="issueList">
     <div class="individualIssue">
         <p>
-            Issue ID: <s:property value="issueID"/><br>
-            Title: <s:property value="title"/><br>
-            Category: <s:property value="category"/><br>
-            Status: <s:property value="status"/><br>
-            Description: <s:property value="description"/><br>
-            Resolution Details: <s:property value="resolutionDetails"/><br>
-            Reported Date: <s:property value="dateTimeReported"/><br>
-            Resolved Date: <s:property value="dateTimeResolved"/><br>
+            <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
+                Issue ID: <s:property value="issueID"/><br>
+                Title: <s:property value="title"/><br>
+                Category: <s:property value="category"/><br>
+                Status: <s:property value="status"/><br>
+                Description: <s:property value="description"/><br>
+                Resolution Details: <s:property value="resolutionDetails"/><br>
+                Reported Date: <s:property value="dateTimeReported"/><br>
+                Resolved Date: <s:property value="dateTimeResolved"/><br>
+            </a>
         </p>
     </div>
 </s:iterator>
+
 
 </body>
 </html>

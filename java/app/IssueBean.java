@@ -1,5 +1,7 @@
 package app;
 
+import java.util.ArrayList;
+
 public class IssueBean {
 
     private String issueID;
@@ -10,8 +12,10 @@ public class IssueBean {
     private String resolutionDetails;
     private String dateTimeReported;
     private String dateTimeResolved;
+    private ArrayList<String> comments;
 
     public IssueBean() {
+        comments = new ArrayList<>();
     }
 
     public IssueBean(String issueID, String title, String category, String status, String description, String resolutionDetails, String dateTimeReported, String dateTimeResolved) {
@@ -23,6 +27,7 @@ public class IssueBean {
         this.resolutionDetails = resolutionDetails;
         this.dateTimeReported = dateTimeReported;
         this.dateTimeResolved = dateTimeResolved;
+        comments = new ArrayList<>();
     }
 
     public String getIssueID() {
@@ -87,5 +92,17 @@ public class IssueBean {
 
     public void setDateTimeResolved(String dateTimeResolved) {
         this.dateTimeResolved = dateTimeResolved;
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<String> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(String comment) {
+        this.comments.add(comment);
     }
 }

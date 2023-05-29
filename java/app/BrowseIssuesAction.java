@@ -38,33 +38,34 @@ public class BrowseIssuesAction extends ActionSupport {
 
         switch (sort) {
             case "issueID":
-                issueList.sort(Comparator.comparing(IssueBean::getIssueID));
+                issueList.sort(Comparator.comparing(IssueBean::getIssueID, Comparator.nullsLast(String::compareTo)));
                 break;
             case "title":
-                issueList.sort(Comparator.comparing(IssueBean::getTitle));
+                issueList.sort(Comparator.comparing(IssueBean::getTitle, Comparator.nullsLast(String::compareTo)));
                 break;
             case "category":
-                issueList.sort(Comparator.comparing(IssueBean::getCategory));
+                issueList.sort(Comparator.comparing(IssueBean::getCategory, Comparator.nullsLast(String::compareTo)));
                 break;
             case "status":
-                issueList.sort(Comparator.comparing(IssueBean::getStatus));
+                issueList.sort(Comparator.comparing(IssueBean::getStatus, Comparator.nullsLast(String::compareTo)));
                 break;
             case "description":
-                issueList.sort(Comparator.comparing(IssueBean::getDescription));
+                issueList.sort(Comparator.comparing(IssueBean::getDescription, Comparator.nullsLast(String::compareTo)));
                 break;
             case "resolutionDetails":
-                issueList.sort(Comparator.comparing(IssueBean::getResolutionDetails));
+                issueList.sort(Comparator.comparing(IssueBean::getResolutionDetails, Comparator.nullsLast(String::compareTo)));
                 break;
             case "dateTimeReported":
-                issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported));
+                issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)));
                 break;
             case "dateTimeResolved":
-                issueList.sort(Comparator.comparing(IssueBean::getDateTimeResolved));
+                issueList.sort(Comparator.comparing(IssueBean::getDateTimeResolved, Comparator.nullsLast(String::compareTo)));
                 break;
             default:
-                issueList.sort(Comparator.comparing(IssueBean::getIssueID));
+                issueList.sort(Comparator.comparing(IssueBean::getIssueID, Comparator.nullsLast(String::compareTo)));
                 break;
         }
+
     }
 
     public String execute() throws Exception {
@@ -82,8 +83,6 @@ public class BrowseIssuesAction extends ActionSupport {
             statement.setString(2, "%" + search + "%");
 
             ResultSet resultSet = statement.executeQuery();
-
-            System.out.println("Result Set: " + resultSet);
 
             while (resultSet.next()) {
                 IssueBean issue = new IssueBean();

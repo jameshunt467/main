@@ -1,0 +1,91 @@
+.description {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #d0d0d0;
+    width: calc(100% - 20px);
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.header > a {
+    all: unset;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: black 1px solid;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+textarea {
+    all: unset;
+    border: black 1px solid;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.comments {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 10px;
+    background-color: #d0d0d0;
+}
+
+.comment {
+    font-size: 14px;
+    margin: 10px;
+    color: #333;
+    background-color: white;
+    width: calc(100% - 20px);
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.addComment {
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: white;
+    width: calc(100% - 20px);
+    height: 70px;
+    padding: 10px 70px 10px 10px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.submitCommentButton {
+    all: unset;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: black 1px solid;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px;
+    height: 70px;
+    width: 70px;
+    text-align: center;
+}
+
+.submitCommentButton:hover {
+    cursor: pointer;
+    background-color: aliceblue;
+}
+
+.addCommentContainer {
+    position: relative;
+}
