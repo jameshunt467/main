@@ -19,10 +19,14 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="login" class="app.LoginAction">
-            <result name="student">/WEB-INF/jsps/login.jsp</result>
+            <result name="student">/WEB-INF/jsps/student-home.jsp</result>
             <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
             <result name="error">/WEB-INF/jsps/login.jsp</result>
         </action>
-        
+
+        <action name="browseIssuesAction" class="app.BrowseIssuesAction">
+            <result name="success">/WEB-INF/jsps/browseIssues.jsp</result>
+        </action>
+
     </package>
 </struts>
