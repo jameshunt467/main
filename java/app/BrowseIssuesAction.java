@@ -13,7 +13,7 @@ import java.util.Comparator;
 public class BrowseIssuesAction extends ActionSupport {
     ArrayList<IssueBean> issueList;
     private String sort;
-    private String search;
+    private String search = "";
 
     public BrowseIssuesAction() {
         issueList = new ArrayList<>();
@@ -74,7 +74,6 @@ public class BrowseIssuesAction extends ActionSupport {
 
 //            TODO CHANGE BELOW TO SEARCH FOR PROPER ITEMS
             String sql = "SELECT * FROM Issue WHERE title LIKE ? OR description LIKE ?";
-
 
             System.out.println("SQL: " + sql);
 

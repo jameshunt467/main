@@ -9,7 +9,6 @@
 </head>
 <body>
 <h1>Browsing ISSUES Display</h1>
-<p>Fuck me it's working!</p>
 
 <s:form action="browseIssuesAction">
     <s:select label="Sort Issues"
