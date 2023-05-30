@@ -4,9 +4,9 @@
             type="javax.sql.DataSource"
             maxActive="10"
             maxIdle="5"
-            username="user1"
-            password="comp1140isBAE"
+            username="sa"
+            password="P@ssword!"
             driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-            url="jdbc:sqlserver://localhost\SQLEXPRESS;databaseName=seng2050_test"
+            url="jdbc:sqlserver://172.17.0.4;databaseName=assignment2jdbc;encrypt=true;trustServerCertificate=true;"
     />
 </Context>
