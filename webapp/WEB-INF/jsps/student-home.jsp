@@ -29,5 +29,8 @@
 <s:url var="browseIssueURL" action="browseIssuesAction" namespace="/" />
 <s:a href="%{browseIssueURL}">Go to Browse Issues JSP</s:a>
 
+<s:url var="browseKnowledgebaseURL" action="browseKnowledgebaseAction" namespace="/" />
+<s:a href="%{browseKnowledgebaseURL}">Go to Browse Knowledgebase JSP</s:a>
+
 </body>
 </html>

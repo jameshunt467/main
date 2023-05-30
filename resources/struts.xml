@@ -35,7 +35,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         <action name="addCommentAction" class="app.AddCommentAction">
             <result name="success">/WEB-INF/jsps/viewIssueDetails.jsp</result>
         </action>
-        
+
+        <action name="browseKnowledgebaseAction" class="app.BrowseKnowledgebaseAction">
+            <result name="success">/WEB-INF/jsps/browseKnowledgebase.jsp</result>
+        </action>
+
         <!-- This ties submit-issue form to SubmitIssueAction class.  This will TELL struts what to do when the form is submitted.  our-site.com/submit-issue -->
         <action name="display-submit-issue">    <!-- Display the page -->
             <result name="success">/WEB-INF/jsps/submit-issue.jsp</result>

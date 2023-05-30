@@ -21,9 +21,9 @@
 
 
 <s:iterator value="issueList">
-    <div class="individualIssue">
-        <p>
-            <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
+    <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
+        <div class="individualIssue">
+            <p>
                 Issue ID: <s:property value="issueID"/><br>
                 Title: <s:property value="title"/><br>
                 Category: <s:property value="category"/><br>
@@ -32,9 +32,9 @@
                 Resolution Details: <s:property value="resolutionDetails"/><br>
                 Reported Date: <s:property value="dateTimeReported"/><br>
                 Resolved Date: <s:property value="dateTimeResolved"/><br>
-            </a>
-        </p>
-    </div>
+            </p>
+        </div>
+    </a>
 </s:iterator>
 
 

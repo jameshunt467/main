@@ -34,10 +34,12 @@
 </div>
 
 <div class="comments">
-    <div class="addCommentContainer">
-        <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
-        <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
-    </div>
+    <s:if test="issue.dateTimeResolved == null">
+        <div class="addCommentContainer">
+            <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
+            <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
+        </div>
+    </s:if>
     <s:iterator value="issue.comments">
         <div class="comment">
             <s:property/>
