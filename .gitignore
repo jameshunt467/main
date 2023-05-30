@@ -1,4 +1,6 @@
 webapp/META-INF/context.xml
 java/app/LoginAction.java
 .idea
+*.scss
+*.map
 
