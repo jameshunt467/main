@@ -1,3 +1,4 @@
+<%@ include file="template.jsp" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
 <!DOCTYPE html>

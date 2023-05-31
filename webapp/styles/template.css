@@ -1,0 +1,24 @@
+#navbar {
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+#navbar > ul {
+    all: unset;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+}
+
+#navbar > ul > li {
+    link: none;
+    all: unset;
+    color: white;
+    font-size: 20px;
+}

@@ -13,7 +13,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <!-- Define interceptors here -->
 
+
+
         <!-- Define actions here -->
+
+
         <action name="index" class="app.IndexAction">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
         </action>
@@ -69,4 +73,6 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
     </package>
+
+
 </struts>
