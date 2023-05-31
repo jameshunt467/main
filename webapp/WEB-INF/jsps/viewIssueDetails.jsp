@@ -34,8 +34,14 @@
         <s:textfield class="addKeyword" name="keyword" placeholder="Add a Keyword"/>
         <s:submit value="Submit" align="center" class="submitKeywordButton"/>
     </s:form>
-
 </div>
+
+<s:if test="issue.dateTimeResolved == null">
+    <s:form action="addToKnowledgebase">
+        <s:hidden name="issueID" value="%{issue.issueID}"/>
+        <s:submit value="Add To Knowledgebase" align="center" class="submitKeywordButton"/>
+    </s:form>
+</s:if>
 
 
 <div class="description">

@@ -61,5 +61,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             </result>
         </action>
 
+        <action name="addToKnowledgebase" class="app.AddToKnowledgebase">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+        </action>
+
     </package>
 </struts>
