@@ -54,8 +54,11 @@
 <div class="comments">
     <s:if test="issue.dateTimeResolved == null">
         <div class="addCommentContainer">
-            <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
-            <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
+            <s:form action="addCommentAction">
+                <s:hidden name="issueID" value="%{issue.issueID}"/>
+                <s:textarea class="addComment" name="comment" placeholder="Add a Comment"/>
+                <s:submit value="Submit" align="center" class="submitCommentButton"/>
+            </s:form>
         </div>
     </s:if>
 
@@ -65,6 +68,7 @@
         </div>
     </s:iterator>
 </div>
+
 
 </body>
 </html>

@@ -33,7 +33,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="addCommentAction" class="app.AddCommentAction">
-            <result name="success">/WEB-INF/jsps/viewIssueDetails.jsp</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
         </action>
 
         <action name="browseKnowledgebaseAction" class="app.BrowseKnowledgebaseAction">
@@ -52,7 +55,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="addKeywordAction" class="app.AddKeywordAction">
-            <result name="success">/WEB-INF/jsps/ViewIssueAction.jsp</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
         </action>
 
     </package>
