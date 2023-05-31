@@ -13,9 +13,11 @@ public class IssueBean {
     private String dateTimeReported;
     private String dateTimeResolved;
     private ArrayList<String> comments;
+    private ArrayList<String> keywords;
 
     public IssueBean() {
         comments = new ArrayList<>();
+        keywords = new ArrayList<>();
     }
 
     public IssueBean(String issueID, String title, String category, String status, String description, String resolutionDetails, String dateTimeReported, String dateTimeResolved) {
@@ -28,6 +30,16 @@ public class IssueBean {
         this.dateTimeReported = dateTimeReported;
         this.dateTimeResolved = dateTimeResolved;
         comments = new ArrayList<>();
+        keywords = new ArrayList<>();
+    }
+
+
+    public ArrayList<String> getKeywords() {
+        return keywords;
+    }
+
+    public void addKeyword(String keyword) {
+        this.keywords.add(keyword);
     }
 
     public String getIssueID() {

@@ -20,24 +20,6 @@
     <h1><s:property value="issue.title"/></h1>
 </div>
 
-<!-- display existing keywords -->
-<s:iterator value="issue.keywords">
-    <div class="keyword">
-        <s:property/>
-    </div>
-</s:iterator>
-
-<!-- form for adding a new keyword -->
-<div class="addKeywordContainer">
-    <s:form action="addKeywordAction">
-        <s:hidden name="issueID" value="%{issue.issueID}"/>
-        <s:textfield class="addKeyword" name="keyword" placeholder="Add a Keyword"/>
-        <s:submit value="Submit" align="center" class="submitKeywordButton"/>
-    </s:form>
-
-</div>
-
-
 <div class="description">
     <s:property value="issue.description"/>
 </div>
@@ -52,13 +34,10 @@
 </div>
 
 <div class="comments">
-    <s:if test="issue.dateTimeResolved == null">
-        <div class="addCommentContainer">
-            <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
-            <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
-        </div>
-    </s:if>
-
+    <div class="addCommentContainer">
+        <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
+        <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
+    </div>
     <s:iterator value="issue.comments">
         <div class="comment">
             <s:property/>
