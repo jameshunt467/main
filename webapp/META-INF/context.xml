@@ -1,6 +1,6 @@
 <Context>
     <Resource
-            name="testConnection"
+            name="dbConnection"
             type="javax.sql.DataSource"
             maxActive="10"
             maxIdle="5"

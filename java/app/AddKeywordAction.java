@@ -21,7 +21,7 @@ public class AddKeywordAction extends ActionSupport {
 
     public String execute() throws Exception {
         if (issueID != null && keyword != null && !keyword.isEmpty()) {
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\MSSQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+            try (Connection connection = DBUtil.getConnection()) {
 
                 // 1. Check if the keyword already exists
                 String sql = "SELECT keywordID FROM Keyword WHERE keyword = ?";
