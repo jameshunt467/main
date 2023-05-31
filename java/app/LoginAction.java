@@ -46,7 +46,8 @@ public class LoginAction extends ActionSupport {
             // establish server driver to avoid
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             // connect to database with set username and password
-            try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\SQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+            // try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://172.17.0.4;databaseName=assignment2jdbc;encrypt=true;trustServerCertificate=true;", "sa", "P@ssword!")) {
+                try (Connection connection = DBUtil.getConnection()) {
                 // Prepare the SQL query
                 String sql = "SELECT * FROM [User] WHERE username = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);

@@ -71,7 +71,7 @@ public class BrowseIssuesAction extends ActionSupport {
     public String execute() throws Exception {
 
 
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\MSSQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+        try (Connection connection = DBUtil.getConnection()) {
 
 //            TODO CHANGE BELOW TO SEARCH FOR PROPER ITEMS
             String sql = "SELECT * FROM Issue WHERE title LIKE ? OR description LIKE ?";

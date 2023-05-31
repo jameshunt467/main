@@ -11,7 +11,7 @@ public class DisplayDataAction {
     private String data;
 
     public String execute() {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\SQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+        try (Connection connection = DBUtil.getConnection()) {
             // Execute SQL queries to fetch data from the database
             // For example:
             Statement statement = connection.createStatement();

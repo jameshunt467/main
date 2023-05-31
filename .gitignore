@@ -3,4 +3,5 @@ java/app/LoginAction.java
 .idea
 *.scss
 *.map
+*.sh
 

@@ -23,7 +23,7 @@ public class BrowseKnowledgebaseAction extends ActionSupport {
 
     public String execute() throws Exception {
 
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\MSSQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+        try (Connection connection = DBUtil.getConnection()) {
 
             String sql = "SELECT i.* FROM Issue i JOIN KnowledgeBaseArticle k ON i.issueID = k.issueID";
 
