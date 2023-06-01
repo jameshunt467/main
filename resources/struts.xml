@@ -62,9 +62,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="login">/WEB-INF/jsps/login.jsp</result>
         </action>
 
-        <!-- Process logged in user, issueDescription and submit -->
-        <action name="processIssue" class="app.ProcessIssueAction">  <!-- Handle the logic -->
-            <result name="success">/WEB-INF/jsps/submit-issue-success.jsp</result>
+        <action name="processIssue" class="app.ProcessIssueAction">  
+            <!-- Redirect to 'viewIssueAction' when processing is successful -->
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param> <!-- Pass the issueId parameter to the 'viewIssueAction' -->
+            </result>
             <!-- include the error msg -->
             <result name="login">/WEB-INF/jsps/login.jsp</result>
             <result name="error">/WEB-INF/jsps/submit-issue-failure.jsp</result>

@@ -19,12 +19,15 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
     private String issueTitle;
     private String issueCategory;
     private LocalDateTime dateTimeReported;
+    private int issueID;             // This is the ID of the issue that was just processed
 
     // getter and setter for issueDescription
+    public int getIssueID() { return issueID; }
     public String getIssueDescription() { return issueDescription; }
     public String getIssueTitle() { return issueTitle; }
     public String getIssueCategory() { return issueCategory; }
 
+    public void setIssueID(int issueID) { this.issueID = issueID; }
     public void setIssueDescription(String issueDescription) { this.issueDescription = issueDescription; }
     public void setIssueTitle(String issueTitle) { this.issueTitle = issueTitle; }
     public void setIssueCategory(String issueCategory) { this.issueCategory = issueCategory; }
@@ -58,6 +61,7 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
             try(ResultSet generatedKeys = stmtIssue.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int issueId = generatedKeys.getInt(1);
+                    this.issueID = issueId; // Store the issueID to view it 
     
                     // Now we insert into UserIssue
                     PreparedStatement stmtUserIssue = con.prepareStatement(
