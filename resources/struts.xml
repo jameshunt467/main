@@ -102,6 +102,15 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="success">/WEB-INF/jsps/myIssues.jsp</result>
         </action>
 
+        <!-- for managers -->
+        <action name="assignIssueAction" class="app.AssignIssueAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+            <result name="error">/WEB-INF/jsps/viewIssueDetails.jsp</result>
+        </action>
+
         <action name="logoutAction" class="app.LogoutAction">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
         </action>

@@ -74,6 +74,24 @@
             <s:property/>
         </div>
     </s:iterator>
+
+    <!-- CHANGE THIS to staff.managerFlag -->
+    <s:if test="#session.user.role == 'manager'">
+        <!-- create css for this -->
+        <div class="assignIssueContainer">
+            <s:form action="assignIssueAction">
+                <s:hidden name="issueID" value="%{issue.issueID}"/>
+                <s:select name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
+                <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
+            </s:form>
+        </div>
+    </s:if>
+    <s:else>
+        <div>
+            Debug: You do not have manager permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
+        </div>
+    </s:else>
+
 </div>
 
 

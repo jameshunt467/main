@@ -89,3 +89,33 @@ textarea {
 .addCommentContainer {
     position: relative;
 }
+
+/* Assign isue */
+.assignIssueContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+.assignIssueContainer select, 
+.assignIssueContainer input[type="submit"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.assignIssueContainer input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+    cursor: pointer;
+}
+
+.assignIssueContainer input[type="submit"]:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

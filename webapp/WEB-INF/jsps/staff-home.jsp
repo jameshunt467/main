@@ -15,7 +15,7 @@
 </head>
 <body>
 <h1>Staff</h1>
-<p>Fuck me it's <s:property value="staff.username" />!</p>
+<p>Fuck me it's <s:property value="#session.user.username" />!</p>
 <ul>
   <li><s:property value="#session.user.firstName"></s:property></li>
   <li><s:property value="#session.user.lastName"></s:property></li>
@@ -25,5 +25,12 @@
   <li><s:property value="#session.user.staffNumber"></s:property></li>
   <li><s:property value="#session.user.manager"></s:property></li>
 </ul>
+
+<s:url var="myIssuesURL" action="myIssuesAction" namespace="/" />
+<s:a href="%{myIssuesURL}">My Issues</s:a>
+
+<s:url var="notificationURL" action="viewNotifications" namespace="/" />
+<s:a href="%{notificationURL}">My Notifications</s:a>
+
 </body>
 </html>
