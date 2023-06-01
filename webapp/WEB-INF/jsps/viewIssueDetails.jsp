@@ -7,7 +7,7 @@
   Time: 7:12 PM
   To change this template use File | Settings | File Templates.
 --%>
-
+<%@ include file="template.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/viewIssueDetails.css">
 </head>
 <body>
+<%--TODO CHECK WHETHER ISSUE IS SOLVED OR NOT // MAKE SURE IT GOES BACK TO THE PROPER PAGE--%>
 <div class="header">
     <a href="browseIssuesAction.action">Back to Issues</a>
     <h1><s:property value="issue.title"/></h1>
@@ -34,8 +35,14 @@
         <s:textfield class="addKeyword" name="keyword" placeholder="Add a Keyword"/>
         <s:submit value="Submit" align="center" class="submitKeywordButton"/>
     </s:form>
-
 </div>
+
+<s:if test="issue.dateTimeResolved == null">
+    <s:form action="addToKnowledgebase">
+        <s:hidden name="issueID" value="%{issue.issueID}"/>
+        <s:submit value="Add To Knowledgebase" align="center" class="submitKeywordButton"/>
+    </s:form>
+</s:if>
 
 
 <div class="description">
@@ -54,8 +61,11 @@
 <div class="comments">
     <s:if test="issue.dateTimeResolved == null">
         <div class="addCommentContainer">
-            <s:textarea class="addComment" name="addCommentAction" placeholder="Add a Comment"/>
-            <s:submit value="Submit" action="addCommentAction" align="center" class="submitCommentButton"/>
+            <s:form action="addCommentAction">
+                <s:hidden name="issueID" value="%{issue.issueID}"/>
+                <s:textarea class="addComment" name="comment" placeholder="Add a Comment"/>
+                <s:submit value="Submit" align="center" class="submitCommentButton"/>
+            </s:form>
         </div>
     </s:if>
 
@@ -65,6 +75,7 @@
         </div>
     </s:iterator>
 </div>
+
 
 </body>
 </html>

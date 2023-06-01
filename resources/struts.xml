@@ -13,7 +13,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <!-- Define interceptors here -->
 
+
+
         <!-- Define actions here -->
+
+
         <action name="index" class="app.IndexAction">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
             <result name="STUDENT_HOME">/WEB-INF/jsps/student-home.jsp</result>
@@ -21,6 +25,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="login" class="app.LoginAction">
+            <result name="student">/WEB-INF/jsps/student-home.jsp</result>
+            <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
+            <result name="error">/WEB-INF/jsps/login.jsp</result>
+        </action>
+
+        <action name="homePage" class="app.HomePageAction">
             <result name="student">/WEB-INF/jsps/student-home.jsp</result>
             <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
             <result name="error">/WEB-INF/jsps/login.jsp</result>
@@ -35,7 +45,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="addCommentAction" class="app.AddCommentAction">
-            <result name="success">/WEB-INF/jsps/viewIssueDetails.jsp</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
         </action>
 
         <action name="browseKnowledgebaseAction" class="app.BrowseKnowledgebaseAction">
@@ -58,8 +71,24 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="addKeywordAction" class="app.AddKeywordAction">
-            <result name="success">/WEB-INF/jsps/ViewIssueAction.jsp</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+        </action>
+
+        <action name="addToKnowledgebase" class="app.AddToKnowledgebase">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+        </action>
+
+        <action name="myIssuesAction" class="app.MyIssuesAction">
+            <result name="success">/WEB-INF/jsps/myIssues.jsp</result>
         </action>
 
     </package>
+
+
 </struts>

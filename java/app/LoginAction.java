@@ -1,5 +1,6 @@
 package app;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.security.MessageDigest;
@@ -97,11 +98,8 @@ public class LoginAction extends ActionSupport implements SessionAware {
                             student.setContactNumber(studentResultSet.getString("contactNumber"));
                             student.setEmail(studentResultSet.getString("email"));
 
-                            // Set session username
-                            session.put("isStudent", true);
-                            session.put("StudentBean", student);
-                            session.put("username", student.getUsername());
-                            session.put("user", "student");
+                            ActionContext.getContext().getSession().put("user", student);
+
                             // redirect to student home screen
                             return "student";
                         }
@@ -130,11 +128,8 @@ public class LoginAction extends ActionSupport implements SessionAware {
                             staff.setStaffNumber(staffResultsSet.getString("staffNumber"));
                             staff.setManager(staffResultsSet.getBoolean("managerFlag"));
 
-                            // Set session username
-                            session.put("isStudent", false);
-                            session.put("StaffBean", student);
-                            session.put("username", staff.getUsername());
-                            session.put("user", "staff");
+                            ActionContext.getContext().getSession().put("user", staff);
+
                             // redirect to staff home screen
                             return "staff";
                         }

@@ -19,6 +19,10 @@ public class AddKeywordAction extends ActionSupport {
         this.keyword = keyword;
     }
 
+    public String getIssueID() {
+        return issueID;
+    }
+
     public String execute() throws Exception {
         if (issueID != null && keyword != null && !keyword.isEmpty()) {
             try (Connection connection = DBUtil.getConnection()) {

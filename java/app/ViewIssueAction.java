@@ -73,10 +73,9 @@ public class ViewIssueAction extends ActionSupport {
                 }
 
                 if(keyword != null && !keyword.isEmpty()) {
-                    sql = "INSERT INTO Keyword (keyword, issueID) VALUES (?, ?)";
+                    sql = "INSERT INTO Keyword (keyword) VALUES (?)";
                     statement = connection.prepareStatement(sql);
                     statement.setString(1, keyword);
-                    statement.setString(2, issueID);
                     statement.executeUpdate();
                 }
 
