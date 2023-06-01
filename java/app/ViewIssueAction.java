@@ -2,6 +2,8 @@ package app;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import app.IssueBean;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,25 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewIssueAction extends ActionSupport {
-    private String issueID;
+    private int issueID;
     private IssueBean issue;
     private String keyword;
 
-    public String getKeyword() {
-        return keyword;
-    }
+    public String getKeyword() { return keyword; }
+    public int getIssueID() { return this.issueID; }
+    public IssueBean getIssue() { return issue; }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    public void setIssueID(String issueID) {
-        this.issueID = issueID;
-    }
-
-    public IssueBean getIssue() {
-        return issue;
-    }
+    public void setKeyword(String keyword) { this.keyword = keyword; }
+    public void setIssueID(int issueID) { this.issueID = issueID; }
+    public void setIssue(IssueBean issue) { this.issue = issue; }    
 
     public String execute() throws Exception {
         try (Connection connection = DBUtil.getConnection()) {
@@ -36,7 +30,7 @@ public class ViewIssueAction extends ActionSupport {
             String sql = "SELECT * FROM Issue WHERE issueID = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, issueID);
+            statement.setInt(1, issueID);       // Changed setString to setInt
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -54,7 +48,7 @@ public class ViewIssueAction extends ActionSupport {
                 sql = "SELECT * FROM Comment WHERE issueID = ?";
 
                 statement = connection.prepareStatement(sql);
-                statement.setString(1, issueID);
+                statement.setInt(1, issueID);    // Changed setString to setInt
 
                 resultSet = statement.executeQuery();
 
@@ -65,7 +59,7 @@ public class ViewIssueAction extends ActionSupport {
                 sql = "SELECT k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
 
                 statement = connection.prepareStatement(sql);
-                statement.setString(1, issueID);
+                statement.setInt(1, issueID);   // Changed setString to setInt
                 resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
