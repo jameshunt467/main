@@ -1,8 +1,6 @@
 package app;
 
-import java.io.Serializable;
-
-public abstract class UserBean implements Serializable {
+public abstract class UserBean {
     protected String username;
     protected String firstName;
     protected String lastName;

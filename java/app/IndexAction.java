@@ -1,6 +1,7 @@
 package app;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.interceptor.SessionAware; // retrieve session
 import java.util.Map;                               // retrieve session
 
@@ -9,16 +10,15 @@ public class IndexAction extends ActionSupport implements SessionAware {
 
     @Override
     public String execute() throws Exception {
-        if (session.containsKey("isStudent")) {
-            boolean isStudent = (boolean) session.get("isStudent");
-            if(isStudent) {
-                return "STUDENT_HOME";    // go straight to student home
-            } else {
-                return "STAFF_HOME";      // go straight to staff home
+        UserBean user = (UserBean) session.get("user");
+        if (user != null) {
+            if (user instanceof StudentBean) {
+                return "STUDENT_HOME";
+            } else if (user instanceof StaffBean) {
+                return "STAFF_HOME";
             }
-        } else {
-            return SUCCESS; // go to login page
-        }
+        } 
+        return SUCCESS; // go to login page
     }
 
     @Override

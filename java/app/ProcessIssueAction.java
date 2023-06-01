@@ -1,6 +1,7 @@
 package app;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionContext;
 
 import javax.sql.*;
 import java.sql.*;
@@ -32,7 +33,8 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
     public String execute() throws Exception {
         // create connection
         try (Connection con = DBUtil.getConnection()) {
-            String username = (String) session.get("username");
+            StudentBean student = (StudentBean) ActionContext.getContext().getSession().get("user");
+            String username = student.getUsername();
 
             // Validate category
             if (!issueCategory.matches("Network|Software|Hardware|Email|Account")) {
