@@ -31,12 +31,6 @@
 <s:url var="notificationURL" action="notificationAction" namespace="/" />
 <s:a href="%{notificationURL}">My Notifications</s:a>
 
-<s:url var="browseKnowledgebaseURL" action="browseKnowledgebaseAction" namespace="/" />
-<s:a href="%{browseKnowledgebaseURL}">Go to Browse Knowledgebase JSP</s:a>
-
-<s:url var="displaySubmitIssueURL" action="displaySubmitIssue" namespace="/" />
-<s:a href="%{displaySubmitIssueURL}">Go to Submit Issue JSP</s:a>
-
 </body>
 </html>
 

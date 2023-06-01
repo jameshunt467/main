@@ -11,6 +11,9 @@
 <s:url var="homeURL" action="homePage" namespace="/" />
 <s:url var="browseIssueURL" action="browseIssuesAction" namespace="/" />
 <s:url var="browseKnowledgebaseURL" action="browseKnowledgebaseAction" namespace="/" />
+<s:url var="displaySubmitIssueURL" action="displaySubmitIssue" namespace="/" />
+
+<s:url var="logoutURL" action="logoutAction" namespace="/" />
 
 
 <!-- Navbar -->
@@ -23,13 +26,13 @@
     <li><s:a href="%{browseIssueURL}">Browse Issues</s:a></li>
     <li><s:a href="%{browseKnowledgebaseURL}">Browse Knowledgebase</s:a></li>
 
-    <li><a href="#">Submit Issue</a></li>
+    <li><s:a href="%{displaySubmitIssueURL}">Submit Issue</s:a></li>
 <%--    TODO IF USER IS A MANAGER--%>
     <s:if test="">
       <li><a href="#">View Statistics</a></li>
     </s:if>
 
-    <li><a href="#">Logout</a></li>
+    <li><s:a href="%{logoutURL}">Logout</s:a></li>
   </ul>
 </div>
 
