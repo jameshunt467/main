@@ -56,17 +56,17 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <!-- Display the 'submit-issue' page -->
-        <action name="displaySubmitIssue" class="app.SubmitIssueAction">    
+        <action name="displaySubmitIssue" class="app.SubmitIssueAction">
             <result name="success">/WEB-INF/jsps/submit-issue.jsp</result>
             <!-- include the error msg -->
-            <result name="login">/WEB-INF/jsps/login.jsp</result>  
+            <result name="login">/WEB-INF/jsps/login.jsp</result>
         </action>
 
         <!-- Process logged in user, issueDescription and submit -->
         <action name="processIssue" class="app.ProcessIssueAction">  <!-- Handle the logic -->
             <result name="success">/WEB-INF/jsps/submit-issue-success.jsp</result>
             <!-- include the error msg -->
-            <result name="login">/WEB-INF/jsps/login.jsp</result>   
+            <result name="login">/WEB-INF/jsps/login.jsp</result>
             <result name="error">/WEB-INF/jsps/submit-issue-failure.jsp</result>
         </action>
 
@@ -86,6 +86,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <action name="myIssuesAction" class="app.MyIssuesAction">
             <result name="success">/WEB-INF/jsps/myIssues.jsp</result>
+        </action>
+
+        <action name="logoutAction" class="app.LogoutAction">
+            <result name="success">/WEB-INF/jsps/login.jsp</result>
         </action>
 
     </package>
