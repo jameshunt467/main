@@ -10,7 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginAction extends ActionSupport {
+// session
+import org.apache.struts2.interceptor.SessionAware;
+import java.util.Map;
+
+public class LoginAction extends ActionSupport implements SessionAware {
+    private Map<String, Object> session;
+
     private String username;
     private String password;
     private StudentBean student;
@@ -43,10 +49,7 @@ public class LoginAction extends ActionSupport {
 
     public String execute() {
         try {
-            // establish server driver to avoid
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             // connect to database with set username and password
-            // try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://172.17.0.4;databaseName=assignment2jdbc;encrypt=true;trustServerCertificate=true;", "sa", "P@ssword!")) {
                 try (Connection connection = DBUtil.getConnection()) {
                 // Prepare the SQL query
                 String sql = "SELECT * FROM [User] WHERE username = ?";
@@ -94,6 +97,11 @@ public class LoginAction extends ActionSupport {
                             student.setContactNumber(studentResultSet.getString("contactNumber"));
                             student.setEmail(studentResultSet.getString("email"));
 
+                            // Set session username
+                            session.put("isStudent", true);
+                            session.put("StudentBean", student);
+                            session.put("username", student.getUsername());
+                            session.put("user", "student");
                             // redirect to student home screen
                             return "student";
                         }
@@ -122,6 +130,11 @@ public class LoginAction extends ActionSupport {
                             staff.setStaffNumber(staffResultsSet.getString("staffNumber"));
                             staff.setManager(staffResultsSet.getBoolean("managerFlag"));
 
+                            // Set session username
+                            session.put("isStudent", false);
+                            session.put("StaffBean", student);
+                            session.put("username", staff.getUsername());
+                            session.put("user", "staff");
                             // redirect to staff home screen
                             return "staff";
                         }
@@ -132,18 +145,17 @@ public class LoginAction extends ActionSupport {
                 return ERROR;
             }
         }
-        // Catch SQL Server driver not found
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            addActionError("An unexpected error has occurred.");
-            return ERROR;
-        }
         // Catch invalid SQL
         catch (SQLException e) {
             e.printStackTrace();
             addActionError("An unexpected error has occurred.");
             return ERROR;
         }
+    }
+
+    @Override
+    public void setSession(Map<String, Object> session) {
+        this.session = session;
     }
 
     // validates the user entered password against the stored password hash.

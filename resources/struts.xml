@@ -16,6 +16,8 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         <!-- Define actions here -->
         <action name="index" class="app.IndexAction">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
+            <result name="STUDENT_HOME">/WEB-INF/jsps/student-home.jsp</result>
+            <result name="STAFF_HOME">/WEB-INF/jsps/staff-home.jsp</result>
         </action>
 
         <action name="login" class="app.LoginAction">
@@ -40,14 +42,18 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="success">/WEB-INF/jsps/browseKnowledgebase.jsp</result>
         </action>
 
-        <!-- This ties submit-issue form to SubmitIssueAction class.  This will TELL struts what to do when the form is submitted.  our-site.com/submit-issue -->
-        <action name="display-submit-issue">    <!-- Display the page -->
+        <!-- Display the 'submit-issue' page -->
+        <action name="displaySubmitIssue" class="app.SubmitIssueAction">    
             <result name="success">/WEB-INF/jsps/submit-issue.jsp</result>
+            <!-- include the error msg -->
+            <result name="login">/WEB-INF/jsps/login.jsp</result>  
         </action>
 
-        <!-- Calls 'execute()' method on SubmitIssueAction when form is submitted  -->
-        <action name="submit-issue" class="app.SubmitIssueAction">  <!-- Handle the logic -->
+        <!-- Process logged in user, issueDescription and submit -->
+        <action name="processIssue" class="app.ProcessIssueAction">  <!-- Handle the logic -->
             <result name="success">/WEB-INF/jsps/submit-issue-success.jsp</result>
+            <!-- include the error msg -->
+            <result name="login">/WEB-INF/jsps/login.jsp</result>   
             <result name="error">/WEB-INF/jsps/submit-issue-failure.jsp</result>
         </action>
 

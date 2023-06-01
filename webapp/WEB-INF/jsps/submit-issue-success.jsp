@@ -7,6 +7,9 @@
 <body>
     <h1>Issue Submission Successful</h1>
     <p>Your issue has been submitted successfully. Thank you for your feedback!</p>
+    <!-- <s:if test="#session['isStudent']">
+        <a href="student-home.jsp">Go Back to Home</a>
+    </s:if> -->
     <a href="index.jsp">Go Back to Home</a>
 </body>
 </html>

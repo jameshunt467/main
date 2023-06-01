@@ -17,12 +17,12 @@
 <h1>Pushing works!</h1>
 <p>Fuck me it's <s:property value="student.username" />!</p>
 <ul>
-    <li><s:property value="student.firstName" /></li>
-    <li><s:property value="student.lastName" /></li>
-    <li><s:property value="student.email" /></li>
-    <li><s:property value="student.contactNumber" /></li>
-    <li><s:property value="student.role" /></li>
-    <li><s:property value="student.studentNumber" /></li>
+  <li><s:property value="#session['StudentBean'].firstName" /></li>
+  <li><s:property value="#session['StudentBean'].lastName" /></li>
+  <li><s:property value="#session['StudentBean'].email" /></li>
+  <li><s:property value="#session['StudentBean'].contactNumber" /></li>
+  <li><s:property value="#session['StudentBean'].role" /></li>
+  <li><s:property value="#session['StudentBean'].studentNumber" /></li>
 </ul>
 
 <!-- TODO THE BELOW ISNT WORKING? -->
@@ -31,6 +31,9 @@
 
 <s:url var="browseKnowledgebaseURL" action="browseKnowledgebaseAction" namespace="/" />
 <s:a href="%{browseKnowledgebaseURL}">Go to Browse Knowledgebase JSP</s:a>
+
+<s:url var="displaySubmitIssueURL" action="displaySubmitIssue" namespace="/" />
+<s:a href="%{displaySubmitIssueURL}">Go to Submit Issue JSP</s:a>
 
 </body>
 </html>

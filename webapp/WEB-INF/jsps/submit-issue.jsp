@@ -6,6 +6,8 @@ the database and return a String indicating the result (typically 'SUCCESS' or
 this case the submit-issue-success.jsp page -->
 
 <!-- HTML form that the user fills out to submit issue -->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,11 +16,13 @@ this case the submit-issue-success.jsp page -->
 </head>
 <body>
     <h1>Submit Issue</h1>
-    <form action="submit-issue" method="post">
-        <label for="issueDescription">Issue Description:</label><br>
-        <textarea id="issueDescription" name="issueDescription"></textarea><br>
-        <input type="submit" value="Submit Issue">
-    </form>
+    <h3>User: <s:property value="#session['username']"/></h3>
+    <s:form action="processIssue">
+        <s:textfield name="issueTitle" label="Issue Title" required="true" />
+        <s:select name="issueCategory" label="Issue Category" list="{'Network', 'Software', 'Hardware', 'Email', 'Account'}" required="true" />
+        <s:textarea name="issueDescription" label="Issue Description" required="true" />
+        <s:submit value="Submit Issue" />
+    </s:form>
 </body>
 </html>
 

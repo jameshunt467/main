@@ -11,8 +11,4 @@ public class StudentBean extends UserBean {
     public void setStudentNumber(String studentNumber) {
         this.studentNumber = studentNumber;
     }
-
-
-
-
 }
