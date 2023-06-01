@@ -77,6 +77,13 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="success">/WEB-INF/jsps/view-notifications.jsp</result>
         </action>
 
+        <action name="markNotificationAsSeen" class="app.MarkNotificationAsSeenAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewNotifications</param>
+            </result>
+            <result name="error">/WEB-INF/jsps/view-notifications.jsp</result>
+        </action>
+
         <action name="addKeywordAction" class="app.AddKeywordAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">viewIssueAction</param>
