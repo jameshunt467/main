@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/viewIssueDetails.css">
 </head>
 <body>
+<%--TODO CHECK WHETHER ISSUE IS SOLVED OR NOT // MAKE SURE IT GOES BACK TO THE PROPER PAGE--%>
 <div class="header">
     <a href="browseIssuesAction.action">Back to Issues</a>
     <h1><s:property value="issue.title"/></h1>

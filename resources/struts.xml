@@ -28,6 +28,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="error">/WEB-INF/jsps/login.jsp</result>
         </action>
 
+        <action name="homePage" class="app.HomePageAction">
+            <result name="student">/WEB-INF/jsps/student-home.jsp</result>
+            <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
+            <result name="error">/WEB-INF/jsps/login.jsp</result>
+        </action>
+
         <action name="browseIssuesAction" class="app.BrowseIssuesAction">
             <result name="success">/WEB-INF/jsps/browseIssues.jsp</result>
         </action>
@@ -70,6 +76,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>
+        </action>
+
+        <action name="myIssuesAction" class="app.MyIssuesAction">
+            <result name="success">/WEB-INF/jsps/myIssues.jsp</result>
         </action>
 
     </package>

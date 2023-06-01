@@ -12,6 +12,15 @@
 <h1>Browsing Knowledgebase</h1>
 
 
+<s:form action="browseKnowledgebaseAction">
+    <s:select label="Sort Issues"
+              name="sort"
+              list="{'issueID', 'title', 'category', 'status', 'description', 'resolutionDetails', 'dateTimeReported', 'dateTimeResolved'}"
+              headerKey="" headerValue="Select"/>
+    <s:textfield name="searchTerm" label="Search Term"/>
+    <s:submit value="Sort"/>
+</s:form>
+
 <!-- TODO CHECK THE value BELOW -->
 <s:iterator value="issueList">
     <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">

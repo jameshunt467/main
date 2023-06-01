@@ -76,8 +76,6 @@ public class BrowseIssuesAction extends ActionSupport {
 //            TODO CHANGE BELOW TO SEARCH FOR PROPER ITEMS
             String sql = "SELECT * FROM Issue WHERE title LIKE ? OR description LIKE ?";
 
-            System.out.println("SQL: " + sql);
-
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, "%" + search + "%");
             statement.setString(2, "%" + search + "%");

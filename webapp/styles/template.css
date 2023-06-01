@@ -1,7 +1,13 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
 #navbar {
     background-color: #333;
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     z-index: 1;
 }
@@ -16,9 +22,10 @@
     justify-content: space-around;
 }
 
-#navbar > ul > li {
+#navbar > ul > li > a {
     link: none;
     all: unset;
     color: white;
     font-size: 20px;
+    cursor: pointer;
 }
