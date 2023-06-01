@@ -22,7 +22,7 @@ public class ViewIssueAction extends ActionSupport {
 
     public void setKeyword(String keyword) { this.keyword = keyword; }
     public void setIssueID(int issueID) { this.issueID = issueID; }
-    public void setIssue(IssueBean issue) { this.issue = issue; }    
+    public void setIssue(IssueBean issue) { this.issue = issue; }
 
     public String execute() throws Exception {
         try (Connection connection = DBUtil.getConnection()) {
@@ -56,15 +56,19 @@ public class ViewIssueAction extends ActionSupport {
                     issue.addComment(resultSet.getString("comment"));
                 }
 
-                sql = "SELECT k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
+                sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
 
                 statement = connection.prepareStatement(sql);
-                statement.setInt(1, issueID);   // Changed setString to setInt
+                statement.setInt(1, issueID);
                 resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
-                    issue.addKeyword(resultSet.getString("keyword"));
+                    KeywordBean keywordBean = new KeywordBean();
+                    keywordBean.setKeywordID(resultSet.getString("keywordID"));
+                    keywordBean.setKeyword(resultSet.getString("keyword"));
+                    issue.addKeyword(keywordBean);
                 }
+
 
                 if(keyword != null && !keyword.isEmpty()) {
                     sql = "INSERT INTO Keyword (keyword) VALUES (?)";

@@ -1,5 +1,6 @@
 package app;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.sql.Connection;
@@ -37,32 +38,23 @@ public class BrowseIssuesAction extends ActionSupport {
         }
 
         switch (sort) {
-            case "issueID":
-                issueList.sort(Comparator.comparing(IssueBean::getIssueID, Comparator.nullsLast(String::compareTo)));
-                break;
-            case "title":
-                issueList.sort(Comparator.comparing(IssueBean::getTitle, Comparator.nullsLast(String::compareTo)));
-                break;
-            case "category":
+            case "Category":
                 issueList.sort(Comparator.comparing(IssueBean::getCategory, Comparator.nullsLast(String::compareTo)));
                 break;
-            case "status":
+            case "Status":
                 issueList.sort(Comparator.comparing(IssueBean::getStatus, Comparator.nullsLast(String::compareTo)));
                 break;
             case "description":
                 issueList.sort(Comparator.comparing(IssueBean::getDescription, Comparator.nullsLast(String::compareTo)));
                 break;
-            case "resolutionDetails":
-                issueList.sort(Comparator.comparing(IssueBean::getResolutionDetails, Comparator.nullsLast(String::compareTo)));
+            case "Reporting Time":
+                issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)).reversed());
                 break;
-            case "dateTimeReported":
-                issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)));
-                break;
-            case "dateTimeResolved":
-                issueList.sort(Comparator.comparing(IssueBean::getDateTimeResolved, Comparator.nullsLast(String::compareTo)));
+            case "Time in Progress":
+//                TODO THIS
                 break;
             default:
-                issueList.sort(Comparator.comparing(IssueBean::getIssueID, Comparator.nullsLast(String::compareTo)));
+                issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)).reversed());
                 break;
         }
 
@@ -70,10 +62,15 @@ public class BrowseIssuesAction extends ActionSupport {
 
     public String execute() throws Exception {
 
+        UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
+
+        if (user == null || !user.getRole().equals("staff")) {
+            return ERROR;
+        }
 
         try (Connection connection = DBUtil.getConnection()) {
 
-//            TODO CHANGE BELOW TO SEARCH FOR PROPER ITEMS
+//            TODO CHANGE BELOW TO SEARCH FOR KEYWORD ITEMS
             String sql = "SELECT * FROM Issue WHERE title LIKE ? OR description LIKE ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);

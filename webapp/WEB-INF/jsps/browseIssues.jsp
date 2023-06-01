@@ -14,7 +14,7 @@
 <s:form action="browseIssuesAction">
     <s:select label="Sort Issues"
               name="sort"
-              list="{'issueID', 'title', 'category', 'status', 'description', 'resolutionDetails', 'dateTimeReported', 'dateTimeResolved'}"
+              list="{'Category', 'Status', 'Reporting Time', 'Time In Progress'}"
               headerKey="" headerValue="Select"/>
     <s:textfield name="searchTerm" label="Search Term"/>
     <s:submit value="Sort"/>
@@ -37,7 +37,9 @@
         </div>
     </a>
 </s:iterator>
-
+<s:if test="issueList.size() == 0">
+    <p>No issues found</p>
+</s:if>
 
 </body>
 </html>
