@@ -17,13 +17,13 @@
 <h1>Staff</h1>
 <p>Fuck me it's <s:property value="staff.username" />!</p>
 <ul>
-  <li><s:property value="staff.firstName"></s:property></li>
-  <li><s:property value="staff.lastName"></s:property></li>
-  <li><s:property value="staff.email"></s:property></li>
-  <li><s:property value="staff.contactNumber"></s:property></li>
-  <li><s:property value="staff.role"></s:property></li>
-  <li><s:property value="staff.staffNumber"></s:property></li>
-  <li><s:property value="staff.manager"></s:property></li>
+  <li><s:property value="#session.user.firstName"></s:property></li>
+  <li><s:property value="#session.user.lastName"></s:property></li>
+  <li><s:property value="#session.user.email"></s:property></li>
+  <li><s:property value="#session.user.contactNumber"></s:property></li>
+  <li><s:property value="#session.user.role"></s:property></li>
+  <li><s:property value="#session.user.staffNumber"></s:property></li>
+  <li><s:property value="#session.user.manager"></s:property></li>
 </ul>
 </body>
 </html>
