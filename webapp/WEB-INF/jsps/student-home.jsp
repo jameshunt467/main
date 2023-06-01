@@ -28,7 +28,7 @@
 <s:url var="myIssuesURL" action="myIssuesAction" namespace="/" />
 <s:a href="%{myIssuesURL}">My Issues</s:a>
 
-<s:url var="notificationURL" action="notificationAction" namespace="/" />
+<s:url var="notificationURL" action="viewNotifications" namespace="/" />
 <s:a href="%{notificationURL}">My Notifications</s:a>
 
 </body>

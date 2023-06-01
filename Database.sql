@@ -1,7 +1,6 @@
 -- passwords are the same text as the username
 -- any primary key with 'ID' in it may be changed to have this increment automatically
 
-
 -- CREATE LOGIN user1 WITH PASSWORD = 'comp1140isBAE';
 -- USE seng2050_test;
 -- CREATE USER user1 FOR LOGIN user1;
@@ -94,6 +93,7 @@ CREATE TABLE Notification (
     dateTimeSent DATETIME NOT NULL,
     username VARCHAR(50) NOT NULL,
     issueID INT NOT NULL,
+	hasSeen BIT NOT NULL DEFAULT 0,   
 
     PRIMARY KEY (notificationID),
 
@@ -175,9 +175,9 @@ VALUES
     ('This is a comment', '2023-05-15 10:31:00', 'user1', 1),
     ('The reply to that comment', '2023-05-15 10:32:00', 'staff2', 1);
 
-INSERT INTO Notification (message, dateTimeSent, username, issueID)
+INSERT INTO Notification (message, dateTimeSent, username, issueID, hasSeen)
 VALUES
-    ('No progress has been made on your issue.', '2023-05-15 12:00:00', 'user1', 1);
+    ('No progress has been made on your issue.', '2023-05-15 12:00:00', 'user1', 1, 0);
 
 INSERT INTO Keyword (keyword)
 VALUES

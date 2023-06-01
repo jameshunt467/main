@@ -73,6 +73,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="error">/WEB-INF/jsps/submit-issue-failure.jsp</result>
         </action>
 
+        <action name="viewNotifications" class="app.ViewNotificationAction">
+            <result name="success">/WEB-INF/jsps/view-notifications.jsp</result>
+        </action>
+
         <action name="addKeywordAction" class="app.AddKeywordAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">viewIssueAction</param>
