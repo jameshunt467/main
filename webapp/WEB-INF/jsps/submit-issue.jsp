@@ -1,11 +1,12 @@
-<!-- When a users fills out the form and submits it, Struts will instantiate a 
+<!-- When a users fills out the form and submits it, Struts will instantiate a
 'SubmitIssueAction' object, set the 'issueDescription' property to the submitted
-value, and call the 'execute' method.  Then 'execute()' will save the data to 
-the database and return a String indicating the result (typically 'SUCCESS' or 
+value, and call the 'execute' method.  Then 'execute()' will save the data to
+the database and return a String indicating the result (typically 'SUCCESS' or
 'ERROR').  Struts then uses this result to determine what page to show next, in
 this case the submit-issue-success.jsp page -->
 
 <!-- HTML form that the user fills out to submit issue -->
+<%@ include file="template.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>

@@ -1,11 +1,13 @@
 package app;
 
+import com.opensymphony.xwork2.ActionSupport;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class AddToKnowledgebase {
+public class AddToKnowledgebase extends ActionSupport {
 
     public int issueID;
     public void setIssueID(int issueID) {

@@ -7,13 +7,11 @@ import com.opensymphony.xwork2.ActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import java.util.Map;
 
-public class SubmitIssueAction extends ActionSupport implements SessionAware {
-
-    private Map<String, Object> session;
+public class SubmitIssueAction extends ActionSupport {
 
     public String execute() {
         StudentBean student = (StudentBean) ActionContext.getContext().getSession().get("user");
-        
+
         if (student != null) {
             // Use username here...
             return SUCCESS;
@@ -24,8 +22,4 @@ public class SubmitIssueAction extends ActionSupport implements SessionAware {
         }
     }
 
-    @Override
-    public void setSession(Map<String, Object> session) {
-        this.session = session;
-    }
 }

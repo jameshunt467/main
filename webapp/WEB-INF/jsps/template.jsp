@@ -12,7 +12,7 @@
 <s:url var="browseIssueURL" action="browseIssuesAction" namespace="/" />
 <s:url var="browseKnowledgebaseURL" action="browseKnowledgebaseAction" namespace="/" />
 <s:url var="displaySubmitIssueURL" action="displaySubmitIssue" namespace="/" />
-
+<s:url var="statisticsURL" action="statisticsAction" namespace="/" />
 <s:url var="logoutURL" action="logoutAction" namespace="/" />
 
 
@@ -28,9 +28,9 @@
 
     <li><s:a href="%{displaySubmitIssueURL}">Submit Issue</s:a></li>
 <%--    TODO IF USER IS A MANAGER--%>
-    <s:if test="">
-      <li><a href="#">View Statistics</a></li>
-    </s:if>
+<%--    <s:if test="">--%>
+      <li><s:a href="%{statisticsURL}">View Statistics</s:a></li>
+<%--    </s:if>--%>
 
     <li><s:a href="%{logoutURL}">Logout</s:a></li>
   </ul>

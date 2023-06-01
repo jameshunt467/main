@@ -92,6 +92,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
         </action>
 
+        <action name="statisticsAction" class="app.StatisticsAction">
+            <result name="success">/WEB-INF/jsps/statistics.jsp</result>
+        </action>
+
     </package>
 
 
