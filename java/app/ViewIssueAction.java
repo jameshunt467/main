@@ -33,19 +33,30 @@ public class ViewIssueAction extends BaseAction {
         ResultSet rs = null;
         try (Connection connection = DBUtil.getConnection()) {
             
-            if(getLoggedInUser().getRole().equals("manager")) {
-                // fetch the list of staff members from your database
-                String sql = "SELECT username FROM User WHERE role = 'staff'"; // replace the condition with the correct one if needed
-                stmt = connection.prepareStatement(sql);
-                rs = stmt.executeQuery();
-                while (rs.next()) {
-                    staffMembers.add(rs.getString("username"));
+            // Checking to see if logged in user is a manager
+            // We are polling the staff table, lining up username with managerFlag
+            String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, getLoggedInUser().getUsername());
+            rs = stmt.executeQuery();
+            if(rs.next()) {
+                boolean isManager = rs.getBoolean("managerFlag");
+                if(isManager) {
+                    // Set the variable isManager to true, this is so we can query this boolean in viewIssueDetails 
+                    ((StaffBean)getLoggedInUser()).setManager(isManager);   
+                    // fetch the list of staff members who are also managers from the database
+                    sql = "SELECT username FROM Staff WHERE managerFlag = 1"; 
+                    stmt = connection.prepareStatement(sql);
+                    rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        staffMembers.add(rs.getString("username"));
+                    }
                 }
                 rs.close();
                 stmt.close();
             }
 
-            String sql = "SELECT * FROM Issue WHERE issueID = ?";
+            sql = "SELECT * FROM Issue WHERE issueID = ?";
 
             stmt = connection.prepareStatement(sql);
             stmt.setInt(1, issueID);       // Changed setString to setInt

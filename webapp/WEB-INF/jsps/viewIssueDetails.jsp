@@ -120,7 +120,7 @@
     </s:iterator>
 
     <!-- CHANGE THIS to staff.managerFlag -->
-    <s:if test="#session.user.role == 'manager'">
+    <s:if test="#session.user.manager">
         <!-- create css for this -->
         <div class="assignIssueContainer">
             <s:form action="assignIssueAction">

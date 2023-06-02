@@ -17,9 +17,7 @@ public class HomePageAction {
             return "student";
         } else if (Objects.equals(user.getRole(), "staff")) {
             return "staff";
-        } else if (Objects.equals(user.getRole(), "manager")) {
-            return "manager";
-        }
+        } 
 
         return "success";
     }
