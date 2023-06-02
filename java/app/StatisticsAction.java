@@ -18,6 +18,8 @@ public class StatisticsAction extends ActionSupport {
     private double averageTimeToResolve;
     private ArrayList<IssueBean> longestIssues;
 
+    private String formattedAverageTimeToResolve;
+
     public StatisticsAction() {
         totalCategoryIssues = new HashMap<>();
         totalStatusIssues = new HashMap<>();
@@ -44,6 +46,17 @@ public class StatisticsAction extends ActionSupport {
 
     public ArrayList<IssueBean> getLongestIssues() {
         return longestIssues;
+    }
+
+    public void setFormattedAverageTimeToResolve(double duration) {
+        int days = (int) duration / (24 * 60);
+        int hours = (int) (duration / 60) % 24;
+        int minutes = (int) duration % 60;
+        formattedAverageTimeToResolve = String.format("%d days, %d hours, %d minutes", days, hours, minutes);
+    }
+
+    public String getFormattedTimeToResolve() {
+        return formattedAverageTimeToResolve;
     }
 
     public String execute() {
@@ -99,6 +112,7 @@ public class StatisticsAction extends ActionSupport {
                 longestIssues.add(issue);
             }
 
+            setFormattedAverageTimeToResolve(averageTimeToResolve);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -38,6 +38,9 @@
         </div>
     </a>
 </s:iterator>
+<s:if test="issueList.size() == 0">
+    <p>No Articles found</p>
+</s:if>
 
 </body>
 </html>

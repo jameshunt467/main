@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 public class EditKeywordAction extends ActionSupport {
     private String keywordID;
     private String keyword;
+    private int issueID;
 
     public void setKeywordID(String keywordID) {
         this.keywordID = keywordID;
@@ -15,6 +16,14 @@ public class EditKeywordAction extends ActionSupport {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public void setIssueID(int issueID) {
+        this.issueID = issueID;
+    }
+
+    public int getIssueID() {
+        return this.issueID;
     }
 
     public String execute() throws Exception {

@@ -17,16 +17,32 @@
 <body>
 <%--TODO CHECK WHETHER ISSUE IS SOLVED OR NOT // MAKE SURE IT GOES BACK TO THE PROPER PAGE--%>
 <div class="header">
-    <a href="browseIssuesAction.action">Back to Issues</a>
+    <s:if test="#session.user.role == 'staff'">
+        <a href="browseIssuesAction.action">Back to Issues</a>
+    </s:if>
     <h1><s:property value="issue.title"/></h1>
 </div>
 
 <!-- display existing keywords -->
+<s:if test="#session.user.role == 'staff'">
 <s:iterator value="issue.keywords">
     <div class="keyword">
-        <s:property/>
+        <s:form action="editKeywordAction">
+            <s:hidden name="keywordID" value="%{#attr.keywordID}"/>
+            <s:hidden name="issueID" value="%{issue.issueID}"/> <!-- new hidden input -->
+            <s:textfield name="keyword" value="%{#attr.keyword}"/>
+        </s:form>
     </div>
 </s:iterator>
+</s:if>
+
+<s:if test="#session.user.role == 'student'">
+    <s:iterator value="issue.keywords">
+        <div class="keyword">
+            <s:property value="keyword"/>
+        </div>
+    </s:iterator>
+</s:if>
 
 <!-- form for adding a new keyword -->
 <div class="addKeywordContainer">
@@ -37,12 +53,40 @@
     </s:form>
 </div>
 
-<s:if test="issue.dateTimeResolved == null">
-    <s:form action="addToKnowledgebase">
-        <s:hidden name="issueID" value="%{issue.issueID}"/>
-        <s:submit value="Add To Knowledgebase" align="center" class="submitKeywordButton"/>
-    </s:form>
+<s:if test="#session.user.role == 'staff'">
+    <s:if test="issue.dateTimeResolved == null">
+        <s:form action="addToKnowledgebase">
+            <s:hidden name="issueID" value="%{issue.issueID}"/>
+            <s:submit value="Add To Knowledgebase" align="center" class="submitKeywordButton"/>
+        </s:form>
+    </s:if>
 </s:if>
+
+<div class="updateStatusContainer">
+    <s:form action="updateStatusAction">
+        <s:hidden name="issueID" value="%{issue.issueID}"/>
+        <s:if test="#session.user.role == 'staff'">
+        <s:select name="newStatus"
+                  list="{'In Progress','Waiting on Third Party', 'Waiting on Reporter','Completed', 'Resolved'}"
+                  value="%{issue.status}"
+                  headerKey="0"
+                  headerValue="%{issue.status}"
+                  id="issueStatusStaff"
+                  cssClass="form-control"/>
+        </s:if>
+
+        <s:if test="#session.user.role == 'student'">
+            <s:select name="newStatus"
+                      list="{'Not Accepted', 'Resolved'}"
+                      value="%{issue.status}"
+                      headerKey="0"
+                      headerValue="%{issue.status}"
+                      id="issueStatusUser"
+                      cssClass="form-control"/>
+        </s:if>
+        <s:submit value="Update Status" align="center" class="submitStatusButton"/>
+    </s:form>
+</div>
 
 
 <div class="description">

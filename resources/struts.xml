@@ -27,7 +27,16 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         <action name="login" class="app.LoginAction">
             <result name="student">/WEB-INF/jsps/student-home.jsp</result>
             <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
-            <result name="error">/WEB-INF/jsps/login.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
+        </action>
+
+        <action name="browseIssuesAction" class="app.BrowseIssuesAction">
+            <result name="success">/WEB-INF/jsps/browseIssues.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="homePage" class="app.HomePageAction">
@@ -36,12 +45,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="error">/WEB-INF/jsps/login.jsp</result>
         </action>
 
-        <action name="browseIssuesAction" class="app.BrowseIssuesAction">
-            <result name="success">/WEB-INF/jsps/browseIssues.jsp</result>
-        </action>
-
         <action name="viewIssueAction" class="app.ViewIssueAction">
             <result name="success">/WEB-INF/jsps/viewIssueDetails.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="addCommentAction" class="app.AddCommentAction">
@@ -49,10 +57,16 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="browseKnowledgebaseAction" class="app.BrowseKnowledgebaseAction">
             <result name="success">/WEB-INF/jsps/browseKnowledgebase.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <!-- Display the 'submit-issue' page -->
@@ -60,9 +74,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             <result name="success">/WEB-INF/jsps/submit-issue.jsp</result>
             <!-- include the error msg -->
             <result name="login">/WEB-INF/jsps/login.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
-        <action name="processIssue" class="app.ProcessIssueAction">  
+        <action name="processIssue" class="app.ProcessIssueAction">
             <!-- Redirect to 'viewIssueAction' when processing is successful -->
             <result name="success" type="redirectAction">
                 <param name="actionName">viewIssueAction</param>
@@ -70,7 +87,9 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             </result>
             <!-- include the error msg -->
             <result name="login">/WEB-INF/jsps/login.jsp</result>
-            <result name="error">/WEB-INF/jsps/submit-issue-failure.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="viewNotifications" class="app.ViewNotificationAction">
@@ -89,17 +108,37 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
+
+        <action name="editKeywordAction" class="app.EditKeywordAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
+        </action>
+
 
         <action name="addToKnowledgebase" class="app.AddToKnowledgebase">
             <result name="success" type="redirectAction">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="myIssuesAction" class="app.MyIssuesAction">
             <result name="success">/WEB-INF/jsps/myIssues.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <!-- for managers -->
@@ -113,11 +152,29 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <action name="logoutAction" class="app.LogoutAction">
             <result name="success">/WEB-INF/jsps/login.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
 
         <action name="statisticsAction" class="app.StatisticsAction">
             <result name="success">/WEB-INF/jsps/statistics.jsp</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
         </action>
+
+        <action name="updateStatusAction" class="app.UpdateStatusAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
+        </action>
+
+
 
     </package>
 

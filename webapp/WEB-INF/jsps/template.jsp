@@ -22,15 +22,21 @@
   <!-- Add your navbar HTML code here -->
   <ul>
     <li><s:a href="%{homeURL}">Home</s:a></li>
-<%--    TODO IF USER IS A MANAGER OR STAFF --%>
-    <li><s:a href="%{browseIssueURL}">Browse Issues</s:a></li>
+
+    <s:if test="#session.user.role == 'staff'">
+      <li><s:a href="%{browseIssueURL}">Browse Issues</s:a></li>
+    </s:if>
+
     <li><s:a href="%{browseKnowledgebaseURL}">Browse Knowledgebase</s:a></li>
 
-    <li><s:a href="%{displaySubmitIssueURL}">Submit Issue</s:a></li>
-<%--    TODO IF USER IS A MANAGER--%>
-<%--    <s:if test="">--%>
-      <li><s:a href="%{statisticsURL}">View Statistics</s:a></li>
-<%--    </s:if>--%>
+    <s:if test="#session.user.role == 'student'">
+        <li><s:a href="%{displaySubmitIssueURL}">Submit Issue</s:a></li>
+    </s:if>
+
+
+    <s:if test="#session.user.role == 'staff'">
+        <li><s:a href="%{statisticsURL}">View Statistics</s:a></li>
+    </s:if>
 
     <li><s:a href="%{logoutURL}">Logout</s:a></li>
   </ul>

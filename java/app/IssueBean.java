@@ -13,7 +13,7 @@ public class IssueBean {
     private String dateTimeReported;
     private String dateTimeResolved;
     private ArrayList<String> comments;
-    private ArrayList<String> keywords;
+    private ArrayList<KeywordBean> keywords;
 
     public IssueBean() {
         comments = new ArrayList<>();
@@ -34,11 +34,12 @@ public class IssueBean {
     }
 
 
-    public ArrayList<String> getKeywords() {
+
+    public ArrayList<KeywordBean> getKeywords() {
         return keywords;
     }
 
-    public void addKeyword(String keyword) {
+    public void addKeyword(KeywordBean keyword) {
         this.keywords.add(keyword);
     }
 

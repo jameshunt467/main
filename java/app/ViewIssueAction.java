@@ -26,7 +26,7 @@ public class ViewIssueAction extends BaseAction {
 
     public void setKeyword(String keyword) { this.keyword = keyword; }
     public void setIssueID(int issueID) { this.issueID = issueID; }
-    public void setIssue(IssueBean issue) { this.issue = issue; }    
+    public void setIssue(IssueBean issue) { this.issue = issue; }
 
     public String execute() throws Exception {
         PreparedStatement stmt = null;
@@ -74,15 +74,19 @@ public class ViewIssueAction extends BaseAction {
                     issue.addComment(rs.getString("comment"));
                 }
 
-                sql = "SELECT k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
+                sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
 
                 stmt = connection.prepareStatement(sql);
                 stmt.setInt(1, issueID);   // Changed setString to setInt
                 rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    issue.addKeyword(rs.getString("keyword"));
+                    KeywordBean keywordBean = new KeywordBean();
+                    keywordBean.setKeywordID(rs.getString("keywordID"));
+                    keywordBean.setKeyword(rs.getString("keyword"));
+                    issue.addKeyword(keywordBean);
                 }
+
 
                 if(keyword != null && !keyword.isEmpty()) {
                     sql = "INSERT INTO Keyword (keyword) VALUES (?)";
