@@ -13,6 +13,16 @@
 <head>
     <title><s:property value="issue.title"/></title>
     <link rel="stylesheet" href="styles/viewIssueDetails.css">
+    <script>
+        function checkBeforeSubmit() {
+            var select = document.getElementById("staffSelect");
+            if (select.value == "") {
+                alert("Please select a staff member");
+                return false;
+            }
+            return true;
+        }
+      </script>
 </head>
 <body>
 <%--TODO CHECK WHETHER ISSUE IS SOLVED OR NOT // MAKE SURE IT GOES BACK TO THE PROPER PAGE--%>
@@ -119,22 +129,25 @@
         </div>
     </s:iterator>
 
-    <!-- CHANGE THIS to staff.managerFlag -->
+    <!-- IF JAVASCRIPT IS DISABLED AND SUBMIT IS CLICKED WITHOUT SELECTING, BAD -->
     <s:if test="#session.user.manager">
-        <!-- create css for this -->
-        <div class="assignIssueContainer">
-            <s:form action="assignIssueAction">
-                <s:hidden name="issueID" value="%{issue.issueID}"/>
-                <s:select name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
-                <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
-            </s:form>
-        </div>
-    </s:if>
-    <s:else>
-        <div>
-            Debug: You do not have manager permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
-        </div>
-    </s:else>
+      <div class="assignIssueContainer">
+          <s:form action="assignIssueAction" onsubmit="return checkBeforeSubmit()">
+              <s:hidden name="issueID" value="%{issue.issueID}"/>
+              <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
+              <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
+          </s:form>
+          <!-- if the staff member was assigned successfuly display message -->
+            <s:if test="hasActionMessage()">
+                <s:actionmessage />
+            </s:if> 
+      </div>
+  </s:if>
+  <s:else>
+      <div>
+          Debug: You do not have manager permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
+      </div>
+  </s:else>
 
 </div>
 

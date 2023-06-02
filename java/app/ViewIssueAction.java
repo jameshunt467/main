@@ -44,9 +44,13 @@ public class ViewIssueAction extends BaseAction {
                 if(isManager) {
                     // Set the variable isManager to true, this is so we can query this boolean in viewIssueDetails 
                     ((StaffBean)getLoggedInUser()).setManager(isManager);   
-                    // fetch the list of staff members who are also managers from the database
-                    sql = "SELECT username FROM Staff WHERE managerFlag = 1"; 
+                     // fetch the list of staff members from the database
+                    //  ALTERNATIVE:                     sql = "SELECT username FROM [User] WHERE role = 'staff'"; // replace the condition with the correct one if needed
+                    sql = "SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username " +
+                        "WHERE Staff.username != ? AND (UserIssue.issueID != ? OR UserIssue.issueID IS NULL)";
                     stmt = connection.prepareStatement(sql);
+                    stmt.setString(1, getLoggedInUser().getUsername());
+                    stmt.setInt(2, issueID); // Assume issueID is the ID of the issue being viewed
                     rs = stmt.executeQuery();
                     while (rs.next()) {
                         staffMembers.add(rs.getString("username"));
@@ -113,12 +117,4 @@ public class ViewIssueAction extends BaseAction {
         }
         return SUCCESS;
     }
-
-    // I need to check user.isManager()
-    // if so then display an option to assign issue
-    // have a drop down of staff members 
-    // after they select, just assign, check if not already assigned.  
-    // This can be found by looking at UserIssue and if staff.username isn't there
-    // with issueID we can assign them 
-
 }
