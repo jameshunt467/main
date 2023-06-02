@@ -13,8 +13,6 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <!-- Define interceptors here -->
 
-
-
         <!-- Define actions here -->
 
 

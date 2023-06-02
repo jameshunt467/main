@@ -67,7 +67,6 @@ public class AssignIssueAction extends BaseAction {
             }
         }
 
-        addActionMessage("Issue has been assigned successfully.");
         return SUCCESS;
     }
 }

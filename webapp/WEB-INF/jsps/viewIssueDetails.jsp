@@ -137,10 +137,6 @@
               <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
               <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
           </s:form>
-          <!-- if the staff member was assigned successfuly display message -->
-            <s:if test="hasActionMessage()">
-                <s:actionmessage />
-            </s:if> 
       </div>
   </s:if>
   <s:else>
