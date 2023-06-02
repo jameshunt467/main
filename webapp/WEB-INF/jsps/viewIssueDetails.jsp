@@ -59,6 +59,7 @@
     <s:form action="addKeywordAction">
         <s:hidden name="issueID" value="%{issue.issueID}"/>
         <s:textfield class="addKeyword" name="keyword" placeholder="Add a Keyword"/>
+        <s:fielderror fieldName="keyword"/>
         <s:submit value="Submit" align="center" class="submitKeywordButton"/>
     </s:form>
 </div>
@@ -118,6 +119,8 @@
             <s:form action="addCommentAction">
                 <s:hidden name="issueID" value="%{issue.issueID}"/>
                 <s:textarea class="addComment" name="comment" placeholder="Add a Comment"/>
+                <!-- illegal characters -->
+                <s:fielderror fieldName="comment"/>
                 <s:submit value="Submit" align="center" class="submitCommentButton"/>
             </s:form>
         </div>

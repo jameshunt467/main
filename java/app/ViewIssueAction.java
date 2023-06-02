@@ -29,6 +29,19 @@ public class ViewIssueAction extends BaseAction {
     public void setIssue(IssueBean issue) { this.issue = issue; }
 
     public String execute() throws Exception {
+        // This is for the comment error
+        if (session.containsKey("commentError")) {
+            String errorMessage = (String) session.get("commentError");
+            this.addFieldError("comment", errorMessage);
+            session.remove("commentError");
+        }
+        // This is for the keyword error
+        if (session.containsKey("keywordError")) {
+            String errorMessage = (String) session.get("keywprdError");
+            this.addFieldError("keyword", errorMessage);
+            session.remove("keywordError");
+        }
+
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try (Connection connection = DBUtil.getConnection()) {

@@ -1,6 +1,7 @@
 package app;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionContext;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +17,17 @@ public class AddKeywordAction extends ActionSupport {
     }
 
     public void setKeyword(String keyword) {
-        this.keyword = keyword;
+        // sanitize the comment input to disallow certain special characters
+        // This will replace any special character not in the list with an empty string
+        String sanitizedKeyword = keyword.replaceAll("[^a-zA-Z0-9 .,?!@#$%&*()_+=-]", "");
+
+        // Check if the comment has been changed, if so add error message
+        if (!keyword.equals(sanitizedKeyword)) {
+            // Put the error message into the session
+            ActionContext.getContext().getSession().put("keywordError", "Could not add keyword, please remove special characters");
+        } else {
+            this.keyword = sanitizedKeyword;
+        }
     }
 
     public String getIssueID() {
@@ -24,6 +35,11 @@ public class AddKeywordAction extends ActionSupport {
     }
 
     public String execute() throws Exception {
+        // If there are action errors, return ERROR
+        // The user may have tried to add a keywprd with special characters
+        if (ActionContext.getContext().getSession().containsKey("keywordError")) {
+            return ERROR;
+        }
         if (issueID != null && keyword != null && !keyword.isEmpty()) {
             try (Connection connection = DBUtil.getConnection()) {
 

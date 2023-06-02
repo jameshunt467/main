@@ -16,7 +16,18 @@ public class AddCommentAction extends ActionSupport {
     }
 
     public void setComment(String comment) {
-        this.comment = comment;
+        // sanitize the comment input to disallow certain special characters
+        // This will replace any special character not in the list with an empty string
+        String sanitizedComment = comment.replaceAll("[^a-zA-Z0-9 .,?!@#$%&*()_+=-]", "");
+
+        // Check if the comment has been changed, if so add error message
+        if (!comment.equals(sanitizedComment)) {
+            // Put the error message into the session
+            ActionContext.getContext().getSession().put("commentError", "Could not add comment, please remove special characters");
+            // this.addFieldError("comment", "Could not add comment, please remove special characters");
+        } else {
+            this.comment = sanitizedComment;
+        }
     }
 
     public String getIssueID() {
@@ -32,7 +43,12 @@ public class AddCommentAction extends ActionSupport {
 
 
     public String execute() throws Exception {
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost\\MSSQLEXPRESS;databaseName=seng2050_test", "user1", "comp1140isBAE")) {
+        // The user may have tried to add a comment with special characters
+        if (ActionContext.getContext().getSession().containsKey("commentError")) {
+            return ERROR;
+        }
+        
+        try (Connection connection = DBUtil.getConnection()) {
             UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
             this.username = user.getUsername();
 

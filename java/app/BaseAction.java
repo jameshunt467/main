@@ -7,7 +7,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import java.util.Map;
 
 public abstract class BaseAction extends ActionSupport implements SessionAware {
-    private Map<String, Object> session;
+    protected Map<String, Object> session;
 
     public UserBean getLoggedInUser() {
         return (UserBean) session.get("user");

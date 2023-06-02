@@ -45,6 +45,7 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <action name="viewIssueAction" class="app.ViewIssueAction">
             <result name="success">/WEB-INF/jsps/viewIssueDetails.jsp</result>
+            <!-- <result name="input">/WEB-INF/jsps/viewIssueDetails.jsp</result> -->
             <result name="error" type="redirectAction">
                 <param name="actionName">homePage</param>
             </result>
@@ -55,8 +56,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>
+            <!-- if we detect an issue -->
+            <result name="input">/WEB-INF/jsps/viewIssueDetails.jsp</result>
             <result name="error" type="redirectAction">
-                <param name="actionName">homePage</param>
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
             </result>
         </action>
 
