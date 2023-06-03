@@ -5,13 +5,14 @@
 <html>
 <head>
     <title>BROWSING ISSUES</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/browseKnowledgebaseStyle.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/styles.css">
 
 </head>
 <body>
 <h1>Browsing Knowledgebase</h1>
 
-
+<div class="flexContainer">
+    <div class="flexItem">
 <s:form action="browseKnowledgebaseAction">
     <s:select label="Sort Issues"
               name="sort"
@@ -20,14 +21,19 @@
     <s:textfield name="searchTerm" label="Search Term"/>
     <s:submit value="Sort"/>
 </s:form>
+    </div>
+</div>
 
 <!-- TODO CHECK THE value BELOW -->
+<div class="flexContainer2">
+
 <s:iterator value="issueList">
+    <div class="flexItem">
     <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
-        <div class="individualKnowledgebase">
+
             <p>
-                Issue ID: <s:property value="issueID"/><br>
-                Title: <s:property value="title"/><br>
+<%--                Issue ID: <s:property value="issueID"/><br>--%>
+                <h3>Title: <s:property value="title"/><br></h3>
                 Category: <s:property value="category"/><br>
                 Status: <s:property value="status"/><br>
                 Description: <s:property value="description"/><br>
@@ -45,6 +51,6 @@
 <s:if test="issueList.size() == 0">
     <p>No Articles found</p>
 </s:if>
-
+</div>
 </body>
 </html>

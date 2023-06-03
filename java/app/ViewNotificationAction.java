@@ -28,7 +28,7 @@ public class ViewNotificationAction extends BaseAction {
 
         try (Connection con = DBUtil.getConnection()) {
             // Prepare SQL to get notifications for the logged-in user that are not seen yet
-            String sql = "SELECT * FROM Notification WHERE username = ? AND hasSeen = 0";
+            String sql = "SELECT * FROM Notification WHERE username = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
 
             // Set the username in the SQL statement

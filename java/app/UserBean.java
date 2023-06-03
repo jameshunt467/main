@@ -6,7 +6,7 @@ public abstract class UserBean {
     protected String lastName;
     protected String email;
     protected String contactNumber;
-    protected  String role;
+    protected String role;
 
     public UserBean() {}
     public String getUsername() {

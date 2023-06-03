@@ -1,19 +1,17 @@
 package app;
 
 import com.opensymphony.xwork2.ActionSupport;
-
 import app.BaseAction;
 import app.IssueBean;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewIssueAction extends BaseAction {
-    private List<String> staffMembers = new ArrayList<>();  // Used for assigning staff members
+    private List<String> staffMembers = new ArrayList<>();
     private String currentlyAssigned = null;
     private boolean isManager = false;
 
@@ -31,99 +29,113 @@ public class ViewIssueAction extends BaseAction {
     public void setKeyword(String keyword) { this.keyword = keyword; }
     public void setIssueID(int issueID) { this.issueID = issueID; }
     public void setIssue(IssueBean issue) { this.issue = issue; }
-    public void setCurrentlyAssigned(String assigned) { this.currentlyAssigned = assigned; }
-    public void setStaffMembers(List<String> sMembers) { this.staffMembers = sMembers; }
     public void setIsManager(boolean state) { this.isManager = state; }
 
     public String execute() throws Exception {
-        // This is for the comment error
-        if (session.containsKey("commentError")) {
-            String errorMessage = (String) session.get("commentError");
-            this.addFieldError("comment", errorMessage);
-            session.remove("commentError");
-        }
-        // This is for the keyword error
-        if (session.containsKey("error")) {
-            String errorMessage = (String) session.get("error");
-            this.addFieldError("keyword", errorMessage);
-            session.remove("error");
-        }
+        handleSessionErrors();
 
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
         try (Connection connection = DBUtil.getConnection()) {
+            checkUserAndFetchAssignedStaff(connection);
+            fetchIssueDetails(connection);
+        }
 
-            // Checking to see if logged in user is a manager
-            String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
-            stmt = connection.prepareStatement(sql);
+        return SUCCESS;
+    }
+
+    private void handleSessionErrors() {
+        handleSessionError("commentError", "comment");
+        handleSessionError("error", "keyword");
+    }
+
+    private void handleSessionError(String sessionKey, String field) {
+        if (session.containsKey(sessionKey)) {
+            String errorMessage = (String) session.get(sessionKey);
+            this.addFieldError(field, errorMessage);
+            session.remove(sessionKey);
+        }
+    }
+
+    private void checkUserAndFetchAssignedStaff(Connection connection) throws SQLException {
+        String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, getLoggedInUser().getUsername());
-            rs = stmt.executeQuery();
-            if(rs.next()) {
-                this.isManager = rs.getBoolean("managerFlag");
-                if(this.isManager) {
-                    ((StaffBean)getLoggedInUser()).setManager(isManager); 
-                    sql = "SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username " +
-                        "WHERE (UserIssue.issueID != ? OR UserIssue.issueID IS NULL)";
-                    stmt = connection.prepareStatement(sql);
-                    stmt.setInt(1, issueID);
-                    rs = stmt.executeQuery();
-                    while (rs.next()) {
-                        staffMembers.add(rs.getString("username"));
-                    }
-                    // Add the current manager to the list as well, if it's not already there
-                    // if (!staffMembers.contains(getLoggedInUser().getUsername())) {
-                    //     staffMembers.add(getLoggedInUser().getUsername());
-                    // }
-                } else {
-                    sql = "SELECT username FROM UserIssue WHERE issueID = ?";
-                    stmt = connection.prepareStatement(sql);
-                    stmt.setInt(1, issueID);
-                    rs = stmt.executeQuery();
-                    if(!rs.next()) {
-                        staffMembers.add(getLoggedInUser().getUsername());
-                    } 
-                }
-                // Fetch the current assigned user for this issue
-                sql = "SELECT username FROM UserIssue WHERE issueID = ?";
-                stmt = connection.prepareStatement(sql);
-                stmt.setInt(1, issueID);
-                rs = stmt.executeQuery();
+
+            try (ResultSet rs = stmt.executeQuery()) {
                 if(rs.next()) {
-                    currentlyAssigned = rs.getString("username");
+                    this.isManager = rs.getBoolean("managerFlag");
+                    ((StaffBean)getLoggedInUser()).setManager(isManager);
+                    fetchStaffMembers(connection);
                 }
-                rs.close();
-                stmt.close();
-                this.setStaffMembers(staffMembers);
-                this.setCurrentlyAssigned(currentlyAssigned);
             }
+        }
+    }
+
+    private void fetchStaffMembers(Connection connection) throws SQLException {
+        PreparedStatement stmt;
+        ResultSet rs;
 
 
-            sql = "SELECT * FROM Issue WHERE issueID = ?";
+        String sql = "SELECT username FROM Staff";
 
-            stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, issueID);       // Changed setString to setInt
+        stmt = connection.prepareStatement(sql);
+        rs = stmt.executeQuery();
 
-            rs = stmt.executeQuery();
+        while (rs.next()) {
+            staffMembers.add(rs.getString("username"));
+        }
 
-            if (rs.next()) {
-                issue = new IssueBean();
-                issue.setIssueID(rs.getString("issueID"));
-                issue.setTitle(rs.getString("title"));
-                issue.setCategory(rs.getString("category"));
-                issue.setStatus(rs.getString("status"));
-                issue.setDescription(rs.getString("description"));
-                issue.setResolutionDetails(rs.getString("resolutionDetails"));
-                issue.setDateTimeReported(rs.getString("dateTimeReported"));
-                issue.setDateTimeResolved(rs.getString("dateTimeResolved"));
+        // Fetch the current assigned user for this issue
+        sql = "SELECT username FROM StaffIssue WHERE issueID = ?";
+        stmt = connection.prepareStatement(sql);
+        stmt.setInt(1, issueID);
+        rs = stmt.executeQuery();
 
+        if(rs.next()) {
+            currentlyAssigned = rs.getString("username");
+        }
 
-                sql = "SELECT * FROM Comment WHERE issueID = ?";
+        rs.close();
+        stmt.close();
+    }
 
-                stmt = connection.prepareStatement(sql);
-                stmt.setInt(1, issueID);    // Changed setString to setInt
+    private void fetchIssueDetails(Connection connection) throws SQLException {
+        String sql = "SELECT * FROM Issue WHERE issueID = ?";
 
-                rs = stmt.executeQuery();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
 
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    setIssueDetails(rs);
+                    issue.setInKnowledgeBase(checkIfInKnowledgeBase(connection));
+                    fetchComments(connection);
+                    fetchKeywords(connection);
+                    insertKeyword(connection);
+                }
+            }
+        }
+    }
+
+    private void setIssueDetails(ResultSet rs) throws SQLException {
+        issue = new IssueBean();
+        issue.setIssueID(rs.getString("issueID"));
+        issue.setTitle(rs.getString("title"));
+        issue.setCategory(rs.getString("category"));
+        issue.setStatus(rs.getString("status"));
+        issue.setDescription(rs.getString("description"));
+        issue.setResolutionDetails(rs.getString("resolutionDetails"));
+        issue.setDateTimeReported(rs.getString("dateTimeReported"));
+        issue.setDateTimeResolved(rs.getString("dateTimeResolved"));
+    }
+
+    private void fetchComments(Connection connection) throws SQLException {
+        String sql = "SELECT * FROM Comment WHERE issueID = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     CommentBean commentBean = new CommentBean();
                     commentBean.setComment(rs.getString("comment"));
@@ -131,33 +143,47 @@ public class ViewIssueAction extends BaseAction {
                     commentBean.setUsername(rs.getString("username"));
                     issue.addComment(commentBean);
                 }
+            }
+        }
+    }
 
-                sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
+    private boolean checkIfInKnowledgeBase(Connection connection) throws SQLException {
+        String sql = "SELECT issueID FROM KnowledgeBaseArticle WHERE issueID = ?";
 
-                stmt = connection.prepareStatement(sql);
-                stmt.setInt(1, issueID);   // Changed setString to setInt
-                rs = stmt.executeQuery();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
 
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    private void fetchKeywords(Connection connection) throws SQLException {
+        String sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     KeywordBean keywordBean = new KeywordBean();
                     keywordBean.setKeywordID(rs.getString("keywordID"));
                     keywordBean.setKeyword(rs.getString("keyword"));
                     issue.addKeyword(keywordBean);
                 }
-
-
-                if(keyword != null && !keyword.isEmpty()) {
-                    sql = "INSERT INTO Keyword (keyword) VALUES (?)";
-                    stmt = connection.prepareStatement(sql);
-                    stmt.setString(1, keyword);
-                    stmt.executeUpdate();
-                }
-
             }
-        } finally {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
         }
-        return SUCCESS;
+    }
+
+    private void insertKeyword(Connection connection) throws SQLException {
+        if(keyword != null && !keyword.isEmpty()) {
+            String sql = "INSERT INTO Keyword (keyword) VALUES (?)";
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, keyword);
+                stmt.executeUpdate();
+            }
+        }
     }
 }

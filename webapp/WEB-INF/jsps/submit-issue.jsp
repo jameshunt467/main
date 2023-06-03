@@ -13,17 +13,20 @@ this case the submit-issue-success.jsp page -->
 <html>
 <head>
     <title>Submit Issue</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/submitIssueStyle.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/styles.css" />
 </head>
 <body>
     <h1>Submit Issue</h1>
-    <h3>User: <s:property value="#session['username']"/></h3>
+    <div class="flexContainer">
+        <div class="flexItem">
     <s:form action="processIssue">
         <s:textfield name="issueTitle" label="Issue Title" required="true" />
         <s:select name="issueCategory" label="Issue Category" list="{'Network', 'Software', 'Hardware', 'Email', 'Account'}" required="true" />
         <s:textarea name="issueDescription" label="Issue Description" required="true" />
         <s:submit value="Submit Issue" />
     </s:form>
+        </div>
+    </div>
 </body>
 </html>
 

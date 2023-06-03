@@ -1,0 +1,15 @@
+.notification-box-seen {
+    background-color: #7d7777;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.notification-box {
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}

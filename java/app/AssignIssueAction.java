@@ -29,7 +29,7 @@ public class AssignIssueAction extends BaseAction {
     public String execute() throws Exception {
         try (Connection con = DBUtil.getConnection()) {
             // First check if the staff member is already assigned to this issue
-            String sql = "SELECT COUNT(*) FROM UserIssue WHERE issueID = ? AND username = ?";
+            String sql = "SELECT COUNT(*) FROM StaffIssue WHERE issueID = ? AND username = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setInt(1, issueID);
             stmt.setString(2, staffUsername);
@@ -41,13 +41,13 @@ public class AssignIssueAction extends BaseAction {
             }
 
             // If there is an existing assignment for this issue, remove it
-            sql = "DELETE FROM UserIssue WHERE issueID = ?";
+            sql = "DELETE FROM StaffIssue WHERE issueID = ?";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, issueID);
             stmt.executeUpdate();
 
             // Step 1: assign staff member to issue
-            sql = "INSERT INTO UserIssue (issueID, username) VALUES (?, ?)";
+            sql = "INSERT INTO StaffIssue (issueID, username) VALUES (?, ?)";
             stmt = con.prepareStatement(sql);
             stmt.setInt(1, issueID);
             stmt.setString(2, staffUsername);

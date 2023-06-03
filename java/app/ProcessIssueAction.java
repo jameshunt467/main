@@ -61,20 +61,20 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
             try(ResultSet generatedKeys = stmtIssue.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int issueId = generatedKeys.getInt(1);
-                    this.issueID = issueId; // Store the issueID to view it 
-    
+                    this.issueID = issueId; // Store the issueID to view it
+
                     // Now we insert into UserIssue
                     PreparedStatement stmtUserIssue = con.prepareStatement(
                         "INSERT INTO UserIssue (username, issueID) VALUES (?, ?)"
                     );
-    
+
                     stmtUserIssue.setString(1, username);
                     stmtUserIssue.setInt(2, issueId);
-    
+
                     // execute the query
                     stmtUserIssue.executeUpdate();
 
-                    return SUCCESS;                     
+                    return SUCCESS;
                 } else {
                     // Handle case where no generated key was returned
                     addActionError("An error occurred when creating the issue.");

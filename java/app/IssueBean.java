@@ -14,6 +14,7 @@ public class IssueBean {
     private String dateTimeResolved;
     private ArrayList<CommentBean> comments;
     private ArrayList<KeywordBean> keywords;
+    private boolean inKnowledgeBase;
 
     public IssueBean() {
         comments = new ArrayList<>();
@@ -34,6 +35,13 @@ public class IssueBean {
     }
 
 
+    public void setInKnowledgeBase(boolean b) {
+        this.inKnowledgeBase = b;
+    }
+
+    public boolean getInKnowledgeBase() {
+        return this.inKnowledgeBase;
+    }
 
     public ArrayList<KeywordBean> getKeywords() {
         return keywords;

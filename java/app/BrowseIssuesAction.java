@@ -68,7 +68,7 @@ public class BrowseIssuesAction extends ActionSupport {
         }
 
         try (Connection connection = DBUtil.getConnection()) {
-            String sql = "SELECT i.*, k.keyword, k.keywordID FROM Issue i LEFT JOIN issueKeyword ik ON i.issueID = ik.issueID LEFT JOIN keyword k ON ik.keywordID = k.keywordID WHERE i.title LIKE ? OR i.description LIKE ? OR k.keyword LIKE ? ORDER BY i.issueID";
+            String sql = "SELECT i.*, k.keyword, k.keywordID FROM Issue i LEFT JOIN issueKeyword ik ON i.issueID = ik.issueID LEFT JOIN keyword k ON ik.keywordID = k.keywordID WHERE (i.title LIKE ? OR i.description LIKE ? OR k.keyword LIKE ?) AND i.issueID NOT IN (SELECT issueID FROM KnowledgeBaseArticle) ORDER BY i.issueID";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, "%" + search + "%");

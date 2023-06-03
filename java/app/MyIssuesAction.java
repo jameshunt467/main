@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.opensymphony.xwork2.Action.SUCCESS;
 
@@ -29,7 +30,16 @@ public class MyIssuesAction {
             UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
 
 //            TODO CHANGE BELOW TO SEARCH FOR PROPER ITEMS
-            String sql = "SELECT i.* FROM Issue i JOIN UserIssue ui ON i.issueID = ui.issueID WHERE ui.username = ?";
+            String sql;
+
+            if (!Objects.equals(user.role, "staff"))
+            {
+                sql = "SELECT i.* FROM Issue i JOIN UserIssue ui ON i.issueID = ui.issueID WHERE ui.username = ?";
+            }
+            else {
+                sql = "SELECT i.* FROM Issue i JOIN StaffIssue ui ON i.issueID = ui.issueID WHERE ui.username = ?";
+            }
+
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, user.getUsername());

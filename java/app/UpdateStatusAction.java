@@ -3,6 +3,7 @@ package app;
 import com.opensymphony.xwork2.ActionSupport;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 
 public class UpdateStatusAction extends ActionSupport {
     private int issueID;
@@ -16,13 +17,24 @@ public class UpdateStatusAction extends ActionSupport {
 
     public String execute() throws Exception {
         try (Connection connection = DBUtil.getConnection()) {
-            String sql = "UPDATE Issue SET status = ? WHERE issueID = ?";
+            if ("Resolved".equals(newStatus)) {
+                String sql = "UPDATE Issue SET status = ?, dateTimeResolved = ? WHERE issueID = ?";
 
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, newStatus);
-            statement.setInt(2, issueID);
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, newStatus);
+                statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+                statement.setInt(3, issueID);
 
-            statement.executeUpdate();
+                statement.executeUpdate();
+            } else {
+                String sql = "UPDATE Issue SET status = ? WHERE issueID = ?";
+
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, newStatus);
+                statement.setInt(2, issueID);
+
+                statement.executeUpdate();
+            }
         }
 
         return SUCCESS;

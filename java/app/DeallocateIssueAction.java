@@ -17,7 +17,7 @@ public class DeallocateIssueAction extends BaseAction {
 
     public String execute() {
         try (Connection connection = DBUtil.getConnection()) {
-            String sql = "DELETE FROM UserIssue WHERE username = ? AND issueID = ?";
+            String sql = "DELETE FROM StaffIssue WHERE username = ? AND issueID = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setInt(2, issueID);

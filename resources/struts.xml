@@ -23,8 +23,12 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="login" class="app.LoginAction">
-            <result name="student">/WEB-INF/jsps/student-home.jsp</result>
-            <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
+            <result name="student" type="redirectAction">
+                <param name="actionName">homeAction</param>
+            </result>
+            <result name="staff" type="redirectAction">
+                <param name="actionName">staffHomeAction</param>
+            </result>
             <result name="error" type="redirectAction">
                 <param name="actionName">homePage</param>
             </result>
@@ -38,9 +42,23 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
         </action>
 
         <action name="homePage" class="app.HomePageAction">
-            <result name="student">/WEB-INF/jsps/student-home.jsp</result>
-            <result name="staff">/WEB-INF/jsps/staff-home.jsp</result>
+            <result name="student" type="redirectAction">
+                <param name="actionName">homeAction</param>
+            </result>
+            <result name="staff" type="redirectAction">
+                <param name="actionName">staffHomeAction</param>
+            </result>
             <result name="error">/WEB-INF/jsps/login.jsp</result>
+        </action>
+
+        <action name="homeAction" class="app.HomeAction">
+            <result name="success">/WEB-INF/jsps/student-home.jsp</result>
+            <result name="error">/WEB-INF/jsps/error.jsp</result>
+        </action>
+
+        <action name="staffHomeAction" class="app.HomeAction">
+            <result name="success">/WEB-INF/jsps/staff-home.jsp</result>
+            <result name="error">/WEB-INF/jsps/error.jsp</result>
         </action>
 
         <action name="viewIssueAction" class="app.ViewIssueAction">
@@ -108,10 +126,11 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
 
         <action name="markNotificationAsSeen" class="app.MarkNotificationAsSeenAction">
             <result name="success" type="redirectAction">
-                <param name="actionName">viewNotifications</param>
+                <param name="actionName">homePage</param>
             </result>
-            <result name="error">/WEB-INF/jsps/view-notifications.jsp</result>
+
         </action>
+
 
         <action name="addKeywordAction" class="app.AddKeywordAction">
             <result name="success" type="redirectAction">
@@ -119,6 +138,10 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="issueID">${issueID}</param>
             </result>
             <result name="error" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+            <result name="input" type="redirectAction">
                 <param name="actionName">viewIssueAction</param>
                 <param name="issueID">${issueID}</param>
             </result>

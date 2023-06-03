@@ -1,0 +1,91 @@
+body{
+    padding: 5%;
+    color: white;
+
+    background-color: #2b323f;
+    font-family: monospace;
+}
+
+#navbar {
+    text-shadow: 0 0 4px #00ff00;
+    color: #00ff00;
+    background-color: #1b2029;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+#navbar > ul {
+    all: unset;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-around;
+}
+
+#navbar > ul > li > a {
+    link: none;
+    all: unset;
+    font-size: 20px;
+    cursor: pointer;
+}
+h1 {
+    color: #00ff00;
+    text-align: center;
+    text-shadow: 0 0 6px #00ff00;
+}
+
+h2 {
+    color: #00ff00;
+    text-shadow: 0 0 2px #00ff00;
+}
+
+h3 {
+    color: #00ff00;
+    text-shadow: 0 0 2px #00ff00;
+}
+
+input[type=submit]{
+    padding: 15px 25px;
+    outline: none;
+    border-radius: 5px;
+    background-color: #00ff00;
+    cursor: pointer;
+
+}
+
+input[type=reset]{
+    padding: 15px 25px;
+    outline: none;
+    border-radius: 5px;
+    background-color: #00ff00;
+    cursor: pointer;
+
+}
+
+.flexContainer {
+    display: flex;
+}
+
+.flexItem {
+    flex: 1;
+    /*width: 50%;*/
+    background-color: #1b2029;
+    padding: 10px;
+    margin: 10px;
+}
+
+.flexContainer2 {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.flexItem > a {
+    color: white;
+    text-decoration: none;
+}

@@ -1,12 +1,12 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <!DOCTYPE html>
 <html>
-<head>
+<%--<head>
   <title>Test</title>
-  <!-- Add your common CSS and JS files here -->
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/template.css">
+
+  &lt;%&ndash;<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/styles.css">&ndash;%&gt;
 </head>
-<body>
+<body>--%>
 
 <s:url var="homeURL" action="homePage" namespace="/" />
 <s:url var="browseIssueURL" action="browseIssuesAction" namespace="/" />
@@ -18,8 +18,6 @@
 
 <!-- Navbar -->
 <div id="navbar">
-
-  <!-- Add your navbar HTML code here -->
   <ul>
     <li><s:a href="%{homeURL}">Home</s:a></li>
 
@@ -27,20 +25,21 @@
       <li><s:a href="%{browseIssueURL}">Browse Issues</s:a></li>
     </s:if>
 
-    <li><s:a href="%{browseKnowledgebaseURL}">Browse Knowledgebase</s:a></li>
+    <li><s:a href="%{browseKnowledgebaseURL}">Browse Knowledge Base</s:a></li>
 
     <s:if test="#session.user.role == 'student'">
         <li><s:a href="%{displaySubmitIssueURL}">Submit Issue</s:a></li>
     </s:if>
 
 
-    <s:if test="#session.user.role == 'staff'">
+    <s:if test="#session.user.manager">
         <li><s:a href="%{statisticsURL}">View Statistics</s:a></li>
     </s:if>
+
 
     <li><s:a href="%{logoutURL}">Logout</s:a></li>
   </ul>
 </div>
 
-</body>
-</html>
+<%--</body>
+</html>--%>

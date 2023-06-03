@@ -3,10 +3,8 @@ package app;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ActionContext;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.Map;
 
 public class AddKeywordAction extends ActionSupport {
     private String issueID;
@@ -17,59 +15,74 @@ public class AddKeywordAction extends ActionSupport {
     }
 
     public void setKeyword(String keyword) {
-        // sanitize the comment input to disallow certain special characters
-        // This will replace any special character not in the list with an empty string
-        String sanitizedKeyword = keyword.replaceAll("[^a-zA-Z0-9 .,?!@#$%&*()_+=-]", "");
-
-        // Check if the comment has been changed, if so add error message
-        if (!keyword.equals(sanitizedKeyword)) {
-            // Put the error message into the session
-            ActionContext.getContext().put("error", "Could not add keyword, please remove special characters");
-        } else {
-            this.keyword = sanitizedKeyword;
-        }
+        this.keyword = keyword.trim().replaceAll("[^a-zA-Z0-9 .,?!@#$%&*()_+=-]", "");
     }
 
     public String getIssueID() {
         return issueID;
     }
 
-    public String execute() throws Exception {
-        // If there are action errors, return ERROR
-        // The user may have tried to add a keywprd with special characters
-        if (ActionContext.getContext().getSession().containsKey("keywordError")) {
-            return ERROR;
+    @Override
+    public void validate() {
+        if (keyword == null || keyword.isEmpty()) {
+            addFieldError("keyword", "Keyword can't be empty");
         }
-        if (issueID != null && keyword != null && !keyword.isEmpty()) {
-            try (Connection connection = DBUtil.getConnection()) {
+    }
 
+    public String execute() throws Exception {
+        String sanitizedKeyword = this.keyword;
+        if (issueID != null && sanitizedKeyword != null && !sanitizedKeyword.isEmpty()) {
+            try (Connection connection = DBUtil.getConnection()) {
                 // 1. Check if the keyword already exists
                 String sql = "SELECT keywordID FROM Keyword WHERE keyword = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, keyword);
+                statement.setString(1, sanitizedKeyword);
                 ResultSet resultSet = statement.executeQuery();
-                String keywordID;
+
+                int keywordID;
                 if (resultSet.next()) {
-                    keywordID = resultSet.getString("keywordID");
+                    // Keyword already exists, get its ID
+                    keywordID = resultSet.getInt("keywordID");
                 } else {
-                    // Keyword doesn't exist, insert it
-                    sql = "INSERT INTO Keyword (keyword) OUTPUT INSERTED.keywordID VALUES (?)";
-                    statement = connection.prepareStatement(sql);
-                    statement.setString(1, keyword);
-                    resultSet = statement.executeQuery();
-                    resultSet.next();
-                    keywordID = resultSet.getString(1);
+                    // Insert a new record into the Keyword table and get its ID
+                    sql = "INSERT INTO Keyword (keyword) VALUES (?)";
+                    statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    statement.setString(1, sanitizedKeyword);
+                    statement.executeUpdate();
+
+                    resultSet = statement.getGeneratedKeys();
+                    if (resultSet.next()) {
+                        keywordID = resultSet.getInt(1);
+                    } else {
+                        throw new SQLException("Creating keyword failed, no ID obtained.");
+                    }
                 }
 
-                // 2. Insert a new record into the IssueKeyword table
-                sql = "INSERT INTO IssueKeyword (issueID, keywordID) VALUES (?, ?)";
+                // 2. Check if this keyword is already associated with this issue
+                sql = "SELECT issueID FROM IssueKeyword WHERE issueID = ? AND keywordID = ?";
                 statement = connection.prepareStatement(sql);
-                statement.setString(1, issueID);
-                statement.setString(2, keywordID);
-                statement.executeUpdate();
+                statement.setString(1, this.issueID);
+                statement.setInt(2, keywordID);
+                resultSet = statement.executeQuery();
+
+                if (resultSet.next()) {
+                    // This keyword is already associated with the issue
+                    addFieldError("keyword", "This keyword already exists for the issue");
+                    return INPUT;
+                } else {
+                    // 3. Associate the keyword with the issue
+                    sql = "INSERT INTO IssueKeyword (issueID, keywordID) VALUES (?, ?)";
+                    statement = connection.prepareStatement(sql);
+                    statement.setString(1, this.issueID);
+                    statement.setInt(2, keywordID);
+                    statement.executeUpdate();
+                }
             }
+        } else {
+            addFieldError("keyword", "Keyword can't be empty or null");
+            return INPUT;
         }
+
         return SUCCESS;
     }
 }
-

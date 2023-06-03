@@ -72,7 +72,7 @@ CREATE TABLE Issue (
 
     CHECK (category = 'Network' OR category = 'Software' OR category = 'Hardware'
             OR category = 'Email' OR category = 'Account'),
-    CHECK (status = 'New' OR status = 'In Progress' OR status = 'Waiting on Third Party'
+    CHECK (status = 'New' OR status = 'In Progress' OR status = 'Waiting on Third Party' OR 'Waiting on Reporter'
             OR status = 'Completed' OR status = 'Not Accepted' OR status = 'Resolved'),
 
     PRIMARY KEY (issueID)
@@ -99,7 +99,7 @@ CREATE TABLE Notification (
     dateTimeSent DATETIME NOT NULL,
     username VARCHAR(50) NOT NULL,
     issueID INT NOT NULL,
-	hasSeen BIT NOT NULL DEFAULT 0,   
+	hasSeen BIT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (notificationID),
 
@@ -147,6 +147,18 @@ CREATE TABLE IssueKeyword (
     FOREIGN KEY (issueID) REFERENCES Issue(issueID)
         ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY (keywordID) REFERENCES Keyword(keywordID)
+        ON UPDATE CASCADE ON DELETE NO ACTION
+)
+
+CREATE TABLE StaffIssue (
+    username VARCHAR(50),
+    issueID INT,
+
+    PRIMARY KEY (username, issueID),
+
+    FOREIGN KEY (username) REFERENCES [User](username)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
         ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
