@@ -18,15 +18,6 @@
 <body>
 <h1>Home - Student</h1>
 
-<ul>
-    <li><s:property value="#session.user.firstName" /></li>
-    <li><s:property value="#session.user.lastName" /></li>
-    <li><s:property value="#session.user.email" /></li>
-    <li><s:property value="#session.user.contactNumber" /></li>
-    <li><s:property value="#session.user.role" /></li>
-    <li><s:property value="#session.user.studentNumber" /></li>
-</ul>
-
 <div class="flexContainer">
     <div class="flexItem">
 <h2>My Issues</h2>

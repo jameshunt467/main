@@ -17,6 +17,11 @@ public class UpdateStatusAction extends ActionSupport {
 
     public String execute() throws Exception {
         try (Connection connection = DBUtil.getConnection()) {
+            // Check if status is 'Not Accepted' and change it to 'In Progress'
+            if ("Not Accepted".equals(newStatus)) {
+                newStatus = "In Progress";
+            }
+
             if ("Resolved".equals(newStatus)) {
                 String sql = "UPDATE Issue SET status = ?, dateTimeResolved = ? WHERE issueID = ?";
 
@@ -40,3 +45,4 @@ public class UpdateStatusAction extends ActionSupport {
         return SUCCESS;
     }
 }
+

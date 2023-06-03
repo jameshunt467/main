@@ -125,11 +125,11 @@
                     <s:submit value="Update Status" align="center" class="submitStatusButton"/>
                 </s:if>
                 <!-- If user is student, allow status to be set to Resolved if not already completed -->
-                <s:if test="#session.user.role == 'student' && issue.status != 'completed'">
+                <s:if test="#session.user.role == 'student' && issue.status != 'Completed'">
                     <s:submit name="newStatus" value="Resolved" id="issueStatusUser" cssClass="form-control"/>
                 </s:if>
                 <!-- If user is student and issue is completed, allow status to be Not Accepted or Resolved -->
-                <s:elseif test="#session.user.role == 'student' && issue.status == 'completed'">
+                <s:else>
                     <s:select name="newStatus"
                               list="{'Not Accepted', 'Resolved'}"
                               value="%{issue.status}"
@@ -138,7 +138,7 @@
                               id="issueStatusUserRes"
                               cssClass="form-control"/>
                     <s:submit value="Update Status" align="center" class="submitStatusButton"/>
-                </s:elseif>
+                </s:else>
             </s:form>
         </div>
     </s:if>

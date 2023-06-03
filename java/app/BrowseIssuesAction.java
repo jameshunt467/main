@@ -4,15 +4,14 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-
 public class BrowseIssuesAction extends ActionSupport {
-    ArrayList<IssueBean> issueList;
+    private ArrayList<IssueBean> issueList;
     private String sort;
     private String search = "";
 
@@ -32,6 +31,7 @@ public class BrowseIssuesAction extends ActionSupport {
         this.search = searchTerm;
     }
 
+    // Sorting the array based on user preference
     public void resortArray() {
         if (sort == null) {
             sort = "issueID";
@@ -50,17 +50,14 @@ public class BrowseIssuesAction extends ActionSupport {
             case "Reporting Time":
                 issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)).reversed());
                 break;
-            case "Time in Progress":
-//                TODO THIS
-                break;
+            // Add additional cases as needed
             default:
                 issueList.sort(Comparator.comparing(IssueBean::getDateTimeReported, Comparator.nullsLast(String::compareTo)).reversed());
                 break;
         }
-
     }
 
-    public String execute() throws Exception {
+    public String execute() {
         UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
 
         if (user == null || !user.getRole().equals("staff")) {
@@ -104,11 +101,13 @@ public class BrowseIssuesAction extends ActionSupport {
             if (issue != null) {
                 issueList.add(issue);
             }
+        } catch (SQLException e) {
+            System.err.println("Database error while browsing issues: " + e.getMessage());
+            return ERROR;
         }
 
         resortArray();
 
         return SUCCESS;
     }
-
 }
