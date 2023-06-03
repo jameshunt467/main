@@ -111,7 +111,8 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
                 <param name="issueID">${issueID}</param>
             </result>
             <result name="error" type="redirectAction">
-                <param name="actionName">homePage</param>
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
             </result>
         </action>
 

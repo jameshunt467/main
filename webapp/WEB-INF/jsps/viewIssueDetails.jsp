@@ -137,16 +137,46 @@
       <div class="assignIssueContainer">
           <s:form action="assignIssueAction" onsubmit="return checkBeforeSubmit()">
               <s:hidden name="issueID" value="%{issue.issueID}"/>
-              <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
-              <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
+              <s:if test="not empty staffMembers">
+                <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
+                <s:if test="currentlyAssigned != null">
+                    <p>Currently assigned to: <s:property value="currentlyAssigned" /></p>
+                    <s:submit value="Reassign Issue" align="center" class="submitAssignButton"/>
+                </s:if>
+                <s:else>
+                    <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
+                </s:else>
+              </s:if>
+              <s:else>
+                <p>No staff available to assign</p>
+              </s:else>
           </s:form>
       </div>
-  </s:if>
-  <s:else>
+    </s:if>
+    <s:elseif test="#session.user.staff">
+    <!-- Content for staff users -->
+        <s:if test="currentlyAssigned == null">
+            <!-- if no one is assigned, this staff member can accept it -->
+            <div class="assignIssueContainer">
+                <s:form action="assignIssueAction" onsubmit="return checkBeforeSubmit()">
+                    <s:hidden name="issueID" value="%{issue.issueID}"/>
+                    <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
+                    <s:submit value="Accept Issue" align="center" class="submitAssignButton"/>
+                </s:form>
+            </div>
+        </s:if>
+        <s:else>
+            <!-- if someone is assigned, just display their username -->
+            <div class="currentlyAssignedDisplay">
+                <p>%{currentlyAssigned} is assigned to this issue</p>
+            </div>
+        </s:else>
+    </s:elseif>
+    <s:else>
       <div>
-          Debug: You do not have manager permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
+          Debug: You do not have required permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
       </div>
-  </s:else>
+    </s:else>
 
 </div>
 

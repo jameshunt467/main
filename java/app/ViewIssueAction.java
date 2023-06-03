@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ViewIssueAction extends BaseAction {
     private List<String> staffMembers = new ArrayList<>();  // Used for assigning staff members
+    private String currentlyAssigned = null;
 
     private int issueID;
     private IssueBean issue;
@@ -22,11 +23,14 @@ public class ViewIssueAction extends BaseAction {
     public String getKeyword() { return keyword; }
     public int getIssueID() { return this.issueID; }
     public IssueBean getIssue() { return issue; }
+    public String getCurrentlyAssigned() { return this.currentlyAssigned; }
     public List<String> getStaffMembers() { return staffMembers; }
 
     public void setKeyword(String keyword) { this.keyword = keyword; }
     public void setIssueID(int issueID) { this.issueID = issueID; }
     public void setIssue(IssueBean issue) { this.issue = issue; }
+    public void setCurrentlyAssigned(String assigned) { this.currentlyAssigned = assigned; }
+    public void setStaffMembers(List<String> sMembers) { this.staffMembers = sMembers; }
 
     public String execute() throws Exception {
         // This is for the comment error
@@ -67,10 +71,26 @@ public class ViewIssueAction extends BaseAction {
                     rs = stmt.executeQuery();
                     while (rs.next()) {
                         staffMembers.add(rs.getString("username"));
+                        // change btn to reassign if issueID is already present
+                    }
+                } else {
+                    // we know that if they're not a manager then they're staff
+                    // this means they can assign themselves if the issueID isn't found in UserIssue
+                    sql = "SELECT username FROM UserIssue WHERE issueID = ?";
+                    stmt = connection.prepareStatement(sql);
+                    stmt.setInt(1, issueID);
+                    rs = stmt.executeQuery();
+                    if(!rs.next()) {
+                        // if the issue isn't found in UserIssue, add the current user to staffMembers
+                        staffMembers.add(getLoggedInUser().getUsername());
+                    } else {
+                        currentlyAssigned = rs.getString("username");
                     }
                 }
                 rs.close();
                 stmt.close();
+                this.setStaffMembers(staffMembers);
+                this.setCurrentlyAssigned(currentlyAssigned);
             }
 
             sql = "SELECT * FROM Issue WHERE issueID = ?";

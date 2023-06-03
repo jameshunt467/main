@@ -67,6 +67,10 @@
                     <s:hidden name="notificationID" value="%{notificationID}" />
                     <s:submit value="Mark as Seen" cssClass="mark-as-seen-button" />
                 </s:form>
+                <s:form action="viewIssueAction">
+                    <s:hidden name="issueID" value="%{issueID}" />
+                    <s:submit value="Show me" cssClass="mark-as-seen-button" />
+                </s:form>
             </div>
         </s:iterator>
     </s:if>

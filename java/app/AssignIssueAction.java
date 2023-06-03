@@ -40,6 +40,12 @@ public class AssignIssueAction extends BaseAction {
                 return ERROR;
             }
 
+            // If there is an existing assignment for this issue, remove it
+            sql = "DELETE FROM UserIssue WHERE issueID = ?";
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, issueID);
+            stmt.executeUpdate();
+
             // Step 1: assign staff member to issue
             sql = "INSERT INTO UserIssue (issueID, username) VALUES (?, ?)";
             stmt = con.prepareStatement(sql);
