@@ -34,6 +34,10 @@
                 Resolution Details: <s:property value="resolutionDetails"/><br>
                 Reported Date: <s:property value="dateTimeReported"/><br>
                 Resolved Date: <s:property value="dateTimeResolved"/><br>
+                Keywords:
+                <s:iterator value="keywords">
+                    <s:property value="keyword"/>,
+                </s:iterator>
             </p>
         </div>
     </a>

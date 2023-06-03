@@ -48,7 +48,11 @@ public class ViewKnowledgebaseAction extends ActionSupport {
                 resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
-                    issue.addComment(resultSet.getString("comment"));
+                    CommentBean commentBean = new CommentBean();
+                    commentBean.setComment(resultSet.getString("comment"));
+                    commentBean.setDateTimePosted(resultSet.getString("dateTimePosted"));
+                    commentBean.setUsername(resultSet.getString("username"));
+                    issue.addComment(commentBean);
                 }
             }
 

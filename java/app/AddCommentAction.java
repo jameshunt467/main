@@ -11,6 +11,8 @@ public class AddCommentAction extends ActionSupport {
     private String comment;
     private String username; // assuming you will get the username from the session or elsewhere
 
+    private String dateTimePosted;
+
     public void setIssueID(String issueID) {
         this.issueID = issueID;
     }
@@ -34,8 +36,22 @@ public class AddCommentAction extends ActionSupport {
         return issueID;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getDateTimePosted() {
+        return dateTimePosted;
+    }
+
+
+
     // pseudocode for when a comment is added (either by the student or staff logged in)
-    // 
+    //
     // We have to check UserIssue
     // SELECT * FROM UserIssue WHERE issueID = issueID && username != user.username
     // Pull out this username (this is either the student or staff associated with this issue)
@@ -52,8 +68,6 @@ public class AddCommentAction extends ActionSupport {
             UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
             this.username = user.getUsername();
 
-            System.out.println(user);
-
              // Step 1: Add the new comment to the database
             String sql = "INSERT INTO Comment (comment, dateTimePosted, username, issueID) VALUES (?, CURRENT_TIMESTAMP, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -67,10 +81,12 @@ public class AddCommentAction extends ActionSupport {
             statement = connection.prepareStatement(sql);
             statement.setString(1, issueID);
             statement.setString(2, username);
+
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     String otherUsername = resultSet.getString("username");
-    
+
                     // Step 3: Create the notification
                     String message = "New comment added: " + comment;
                     sql = "INSERT INTO Notification (issueID, username, hasSeen, message, dateTimeSent) VALUES (?, ?, 0, ?, CURRENT_TIMESTAMP)";

@@ -177,7 +177,15 @@ Configuration 2.5//EN" "http://struts.apache.org/dtds/struts-2.5.dtd">
             </result>
         </action>
 
-
+        <action name="deleteKeywordAction" class="app.DeleteKeywordAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">viewIssueAction</param>
+                <param name="issueID">${issueID}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">homePage</param>
+            </result>
+        </action>
 
     </package>
 

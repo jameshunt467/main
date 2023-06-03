@@ -49,7 +49,7 @@ public class ViewIssueAction extends BaseAction {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try (Connection connection = DBUtil.getConnection()) {
-            
+
             // Checking to see if logged in user is a manager
             // We are polling the staff table, lining up username with managerFlag
             String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
@@ -59,8 +59,8 @@ public class ViewIssueAction extends BaseAction {
             if(rs.next()) {
                 boolean isManager = rs.getBoolean("managerFlag");
                 if(isManager) {
-                    // Set the variable isManager to true, this is so we can query this boolean in viewIssueDetails 
-                    ((StaffBean)getLoggedInUser()).setManager(isManager);   
+                    // Set the variable isManager to true, this is so we can query this boolean in viewIssueDetails
+                    ((StaffBean)getLoggedInUser()).setManager(isManager);
                      // fetch the list of staff members from the database
                     //  ALTERNATIVE:                     sql = "SELECT username FROM [User] WHERE role = 'staff'"; // replace the condition with the correct one if needed
                     sql = "SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username " +
@@ -111,6 +111,7 @@ public class ViewIssueAction extends BaseAction {
                 issue.setDateTimeReported(rs.getString("dateTimeReported"));
                 issue.setDateTimeResolved(rs.getString("dateTimeResolved"));
 
+
                 sql = "SELECT * FROM Comment WHERE issueID = ?";
 
                 stmt = connection.prepareStatement(sql);
@@ -119,7 +120,11 @@ public class ViewIssueAction extends BaseAction {
                 rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    issue.addComment(rs.getString("comment"));
+                    CommentBean commentBean = new CommentBean();
+                    commentBean.setComment(rs.getString("comment"));
+                    commentBean.setDateTimePosted(rs.getString("dateTimePosted"));
+                    commentBean.setUsername(rs.getString("username"));
+                    issue.addComment(commentBean);
                 }
 
                 sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";

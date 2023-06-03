@@ -15,35 +15,52 @@
     <link rel="stylesheet" href="styles/viewIssueDetails.css">
     <script>
         function checkBeforeSubmit() {
-            var select = document.getElementById("staffSelect");
+            const select = document.getElementById("staffSelect");
             if (select.value == "") {
                 alert("Please select a staff member");
                 return false;
             }
             return true;
         }
-      </script>
+
+        function confirmAddToKnowledgebase() {
+            const confirmation = confirm("Are you sure you want to add this issue to the Knowledgebase?");
+            if (confirmation) {
+                document.getElementById("addToKnowledgebaseForm").submit();
+            }
+        }
+
+    </script>
 </head>
 <body>
-<%--TODO CHECK WHETHER ISSUE IS SOLVED OR NOT // MAKE SURE IT GOES BACK TO THE PROPER PAGE--%>
 <div class="header">
     <s:if test="#session.user.role == 'staff'">
         <a href="browseIssuesAction.action">Back to Issues</a>
     </s:if>
-    <h1><s:property value="issue.title"/></h1>
+    <s:if test="issue.dateTimeResolved == null">
+        <h1>Issue - <s:property value="issue.title"/></h1>
+    </s:if>
+    <s:if test="issue.dateTimeResolved != null">
+        <h1>Knowledgebase - <s:property value="issue.title"/></h1>
+    </s:if>
 </div>
 
 <!-- display existing keywords -->
 <s:if test="#session.user.role == 'staff'">
-<s:iterator value="issue.keywords">
-    <div class="keyword">
-        <s:form action="editKeywordAction">
-            <s:hidden name="keywordID" value="%{#attr.keywordID}"/>
-            <s:hidden name="issueID" value="%{issue.issueID}"/> <!-- new hidden input -->
-            <s:textfield name="keyword" value="%{#attr.keyword}"/>
-        </s:form>
-    </div>
-</s:iterator>
+    <s:iterator value="issue.keywords">
+        <div class="keyword">
+            <s:form action="editKeywordAction">
+                <s:hidden name="keywordID" value="%{#attr.keywordID}"/>
+                <s:hidden name="issueID" value="%{issue.issueID}"/> <!-- new hidden input -->
+                <s:textfield name="keyword" value="%{#attr.keyword}"/>
+            </s:form>
+            <s:form action="deleteKeywordAction">
+                <s:hidden name="keywordID" value="%{#attr.keywordID}"/>
+                <s:hidden name="issueID" value="%{issue.issueID}"/>
+                <s:submit value="Delete" align="center" class="deleteKeywordButton"/>
+            </s:form>
+        </div>
+    </s:iterator>
 </s:if>
 
 <s:if test="#session.user.role == 'student'">
@@ -66,12 +83,13 @@
 
 <s:if test="#session.user.role == 'staff'">
     <s:if test="issue.dateTimeResolved == null">
-        <s:form action="addToKnowledgebase">
+        <s:form action="addToKnowledgebase" id="addToKnowledgebaseForm">
             <s:hidden name="issueID" value="%{issue.issueID}"/>
-            <s:submit value="Add To Knowledgebase" align="center" class="submitKeywordButton"/>
+            <input type="button" value="Add To Knowledgebase" class="submitKeywordButton" onclick="confirmAddToKnowledgebase()"/>
         </s:form>
     </s:if>
 </s:if>
+
 
 <div class="updateStatusContainer">
     <s:form action="updateStatusAction">
@@ -128,7 +146,12 @@
 
     <s:iterator value="issue.comments">
         <div class="comment">
-            <s:property/>
+            <div class="commentText">
+                <s:property value="comment"/>
+            </div>
+            <div class="commentDetails">
+                Posted by: <s:property value="username"/> on <s:property value="dateTimePosted"/>
+            </div>
         </div>
     </s:iterator>
 

@@ -12,7 +12,7 @@ public class IssueBean {
     private String resolutionDetails;
     private String dateTimeReported;
     private String dateTimeResolved;
-    private ArrayList<String> comments;
+    private ArrayList<CommentBean> comments;
     private ArrayList<KeywordBean> keywords;
 
     public IssueBean() {
@@ -107,15 +107,15 @@ public class IssueBean {
         this.dateTimeResolved = dateTimeResolved;
     }
 
-    public ArrayList<String> getComments() {
+    public ArrayList<CommentBean> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<String> comments) {
+    public void setComments(ArrayList<CommentBean> comments) {
         this.comments = comments;
     }
 
-    public void addComment(String comment) {
+    public void addComment(CommentBean comment) {
         this.comments.add(comment);
     }
 }
