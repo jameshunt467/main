@@ -1,6 +1,12 @@
 -- passwords are the same text as the username
 -- any primary key with 'ID' in it may be changed to have this increment automatically
 
+SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username
+WHERE Staff.username != 'manager1' AND (UserIssue.issueID != 1 OR UserIssue.issueID IS NULL)
+
+-- SELECT managerFlag FROM Staff WHERE username = 'manager1'
+
+
 -- CREATE LOGIN user1 WITH PASSWORD = 'comp1140isBAE';
 -- USE seng2050_test;
 -- CREATE USER user1 FOR LOGIN user1;

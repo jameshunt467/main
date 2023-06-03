@@ -62,7 +62,6 @@ public class ViewIssueAction extends BaseAction {
                 this.isManager = rs.getBoolean("managerFlag");
                 if(this.isManager) {
                     ((StaffBean)getLoggedInUser()).setManager(isManager); 
-                    this.isManager = true;
                     sql = "SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username " +
                         "WHERE (UserIssue.issueID != ? OR UserIssue.issueID IS NULL)";
                     stmt = connection.prepareStatement(sql);
@@ -72,9 +71,9 @@ public class ViewIssueAction extends BaseAction {
                         staffMembers.add(rs.getString("username"));
                     }
                     // Add the current manager to the list as well, if it's not already there
-                    if (!staffMembers.contains(getLoggedInUser().getUsername())) {
-                        staffMembers.add(getLoggedInUser().getUsername());
-                    }
+                    // if (!staffMembers.contains(getLoggedInUser().getUsername())) {
+                    //     staffMembers.add(getLoggedInUser().getUsername());
+                    // }
                 } else {
                     sql = "SELECT username FROM UserIssue WHERE issueID = ?";
                     stmt = connection.prepareStatement(sql);
@@ -82,9 +81,7 @@ public class ViewIssueAction extends BaseAction {
                     rs = stmt.executeQuery();
                     if(!rs.next()) {
                         staffMembers.add(getLoggedInUser().getUsername());
-                    } else {
-                        currentlyAssigned = rs.getString("username");
-                    }
+                    } 
                 }
                 // Fetch the current assigned user for this issue
                 sql = "SELECT username FROM UserIssue WHERE issueID = ?";
