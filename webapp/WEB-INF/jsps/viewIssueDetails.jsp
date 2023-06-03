@@ -16,6 +16,28 @@
     <script>
         function checkBeforeSubmit() {
             var select = document.getElementById("staffSelect");
+            if (select.selectedIndex == 0) {
+                alert("Please select a staff member");
+                return false;
+            }
+            return true;
+        }
+
+        function assignIssue() {
+            return checkBeforeSubmit();
+        }
+
+        function reassignIssue() {
+            return checkBeforeSubmit();
+        }
+
+        function deallocateIssue() {
+            // No need to check for selected staff member as we're deallocating
+            return true;
+        }
+
+        function checkBeforeSubmit() {
+            var select = document.getElementById("staffSelect");
             if (select.value == "") {
                 alert("Please select a staff member");
                 return false;
@@ -135,48 +157,55 @@
     <!-- IF JAVASCRIPT IS DISABLED AND SUBMIT IS CLICKED WITHOUT SELECTING, BAD -->
     <s:if test="#session.user.manager">
       <div class="assignIssueContainer">
+          <s:if test="currentlyAssigned != null">
+                <s:form action="deallocateIssueAction">
+                <s:hidden name="issueID" value="%{issue.issueID}"/>
+                <s:hidden name="username" value="%{currentlyAssigned}"/>  <!-- This line was added -->
+                <p>Currently assigned to: <s:property value="currentlyAssigned" /></p>
+                <s:submit value="Deallocate Issue" align="center" class="submitDeallocateButton"/>
+            </s:form>
+          </s:if>
           <s:form action="assignIssueAction" onsubmit="return checkBeforeSubmit()">
               <s:hidden name="issueID" value="%{issue.issueID}"/>
-              <s:if test="not empty staffMembers">
-                <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
                 <s:if test="currentlyAssigned != null">
-                    <p>Currently assigned to: <s:property value="currentlyAssigned" /></p>
+                    <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
                     <s:submit value="Reassign Issue" align="center" class="submitAssignButton"/>
                 </s:if>
                 <s:else>
+                    <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
                     <s:submit value="Assign Issue" align="center" class="submitAssignButton"/>
                 </s:else>
-              </s:if>
-              <s:else>
-                <p>No staff available to assign</p>
-              </s:else>
           </s:form>
       </div>
     </s:if>
-    <s:elseif test="#session.user.staff">
-    <!-- Content for staff users -->
-        <s:if test="currentlyAssigned == null">
-            <!-- if no one is assigned, this staff member can accept it -->
-            <div class="assignIssueContainer">
-                <s:form action="assignIssueAction" onsubmit="return checkBeforeSubmit()">
-                    <s:hidden name="issueID" value="%{issue.issueID}"/>
-                    <s:select id="staffSelect" name="staffUsername" list="staffMembers" headerKey="" headerValue="Select Staff" />
-                    <s:submit value="Accept Issue" align="center" class="submitAssignButton"/>
-                </s:form>
-            </div>
-        </s:if>
-        <s:else>
-            <!-- if someone is assigned, just display their username -->
-            <div class="currentlyAssignedDisplay">
-                <p>%{currentlyAssigned} is assigned to this issue</p>
-            </div>
-        </s:else>
+    <s:elseif test="#session.user.getRole() == 'student'">
+        <div>
+            <!-- Debug: You do not have required permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" /> -->
+        </div>
     </s:elseif>
     <s:else>
-      <div>
-          Debug: You do not have required permissions: Username - <s:property value="#session.user.username" />, Role - <s:property value="#session.user.role" />
-      </div>
+        <div class="assignIssueContainer">
+            <s:if test="currentlyAssigned == #session.user.username">
+                <s:form action="deallocateIssueAction">
+                    <s:hidden name="issueID" value="%{issue.issueID}"/>
+                    <s:hidden name="username" value="%{#session.user.username}"/>
+                    <p>Currently assigned to you.</p>
+                    <s:submit value="Deallocate Issue" align="center" class="submitDeallocateButton"/>
+                </s:form>
+            </s:if>
+            <s:elseif test="currentlyAssigned == null">
+                <s:form action="assignIssueAction">
+                    <s:hidden name="issueID" value="%{issue.issueID}"/>
+                    <s:hidden name="staffUsername" value="%{#session.user.username}"/>
+                    <s:submit value="Assign Issue to Me" align="center" class="submitAssignButton"/>
+                </s:form>
+            </s:elseif>
+            <s:else>
+                <p>Issue is currently assigned to someone else.</p>
+            </s:else>
+        </div>
     </s:else>
+    
 
 </div>
 

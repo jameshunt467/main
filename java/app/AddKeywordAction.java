@@ -24,7 +24,7 @@ public class AddKeywordAction extends ActionSupport {
         // Check if the comment has been changed, if so add error message
         if (!keyword.equals(sanitizedKeyword)) {
             // Put the error message into the session
-            ActionContext.getContext().getSession().put("keywordError", "Could not add keyword, please remove special characters");
+            ActionContext.getContext().put("error", "Could not add keyword, please remove special characters");
         } else {
             this.keyword = sanitizedKeyword;
         }

@@ -13,7 +13,7 @@ public class StaffBean extends UserBean {
         this.staffNumber = staffNumber;
     }
     public boolean isManager() {
-        return manager;
+        return this.manager;
     }
     public void setManager(boolean manager) {
         this.manager = manager;
