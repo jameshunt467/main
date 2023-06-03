@@ -69,28 +69,45 @@ public class BrowseKnowledgebaseAction extends ActionSupport {
     }
 
 
+
     public String execute() throws Exception {
 
         try (Connection connection = DBUtil.getConnection()) {
 
-            String sql = "SELECT i.* FROM Issue i JOIN KnowledgeBaseArticle k ON i.issueID = k.issueID WHERE i.title LIKE ? OR i.description LIKE ?";
+            String sql = "SELECT i.*, k.keyword, k.keywordID FROM Issue i LEFT JOIN issueKeyword ik ON i.issueID = ik.issueID LEFT JOIN keyword k ON ik.keywordID = k.keywordID WHERE i.title LIKE ? OR i.description LIKE ? OR k.keyword LIKE ? ORDER BY i.issueID";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, "%" + this.search + "%");
             statement.setString(2, "%" + this.search + "%");
+            statement.setString(3, "%" + this.search + "%");
 
             ResultSet resultSet = statement.executeQuery();
 
+            String lastIssueID = "";
+            IssueBean issue = null;
             while (resultSet.next()) {
-                IssueBean issue = new IssueBean();
-                issue.setIssueID(resultSet.getString("issueID"));
-                issue.setTitle(resultSet.getString("title"));
-                issue.setCategory(resultSet.getString("category"));
-                issue.setStatus(resultSet.getString("status"));
-                issue.setDescription(resultSet.getString("description"));
-                issue.setResolutionDetails(resultSet.getString("resolutionDetails"));
-                issue.setDateTimeReported(resultSet.getString("dateTimeReported"));
-                issue.setDateTimeResolved(resultSet.getString("dateTimeResolved"));
+                String currentIssueID = resultSet.getString("issueID");
+                if (!currentIssueID.equals(lastIssueID)) {
+                    if (issue != null) {
+                        issueList.add(issue);
+                    }
+                    issue = new IssueBean();
+                    issue.setIssueID(currentIssueID);
+                    issue.setTitle(resultSet.getString("title"));
+                    issue.setCategory(resultSet.getString("category"));
+                    issue.setStatus(resultSet.getString("status"));
+                    issue.setDescription(resultSet.getString("description"));
+                    issue.setResolutionDetails(resultSet.getString("resolutionDetails"));
+                    issue.setDateTimeReported(resultSet.getString("dateTimeReported"));
+                    issue.setDateTimeResolved(resultSet.getString("dateTimeResolved"));
+                }
+                KeywordBean keywordBean = new KeywordBean();
+                keywordBean.setKeywordID(resultSet.getString("keywordID"));
+                keywordBean.setKeyword(resultSet.getString("keyword"));
+                issue.addKeyword(keywordBean);
+                lastIssueID = currentIssueID;
+            }
+            if (issue != null) {
                 issueList.add(issue);
             }
         }
@@ -101,3 +118,4 @@ public class BrowseKnowledgebaseAction extends ActionSupport {
     }
 
 }
+

@@ -52,7 +52,7 @@ public class ViewIssueAction extends BaseAction {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try (Connection connection = DBUtil.getConnection()) {
-            
+
             // Checking to see if logged in user is a manager
             String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
             stmt = connection.prepareStatement(sql);
@@ -119,6 +119,7 @@ public class ViewIssueAction extends BaseAction {
                 issue.setDateTimeReported(rs.getString("dateTimeReported"));
                 issue.setDateTimeResolved(rs.getString("dateTimeResolved"));
 
+
                 sql = "SELECT * FROM Comment WHERE issueID = ?";
 
                 stmt = connection.prepareStatement(sql);
@@ -127,7 +128,11 @@ public class ViewIssueAction extends BaseAction {
                 rs = stmt.executeQuery();
 
                 while (rs.next()) {
-                    issue.addComment(rs.getString("comment"));
+                    CommentBean commentBean = new CommentBean();
+                    commentBean.setComment(rs.getString("comment"));
+                    commentBean.setDateTimePosted(rs.getString("dateTimePosted"));
+                    commentBean.setUsername(rs.getString("username"));
+                    issue.addComment(commentBean);
                 }
 
                 sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";

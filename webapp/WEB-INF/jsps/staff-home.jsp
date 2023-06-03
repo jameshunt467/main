@@ -14,16 +14,16 @@
   <title>Data Display Test</title>
 </head>
 <body>
-<h1>Staff</h1>
-<p>Fuck me it's <s:property value="#session.user.username" />!</p>
+<h1>Home - Staff</h1>
+
 <ul>
-  <li><s:property value="#session.user.firstName"></s:property></li>
-  <li><s:property value="#session.user.lastName"></s:property></li>
-  <li><s:property value="#session.user.email"></s:property></li>
-  <li><s:property value="#session.user.contactNumber"></s:property></li>
-  <li><s:property value="#session.user.role"></s:property></li>
-  <li><s:property value="#session.user.staffNumber"></s:property></li>
-  <li><s:property value="#session.user.manager"></s:property></li>
+  <li><s:property value="#session.user.firstName" /></li>
+  <li><s:property value="#session.user.lastName"/></li>
+  <li><s:property value="#session.user.email"/></li>
+  <li><s:property value="#session.user.contactNumber"/></li>
+  <li><s:property value="#session.user.role"/></li>
+  <li><s:property value="#session.user.staffNumber"/></li>
+  <li><s:property value="#session.user.manager"/></li>
 </ul>
 
 <s:url var="myIssuesURL" action="myIssuesAction" namespace="/" />

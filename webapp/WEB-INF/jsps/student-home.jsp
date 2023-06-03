@@ -14,8 +14,8 @@
     <title>Data Display Test</title>
 </head>
 <body>
-<h1>Pushing works!</h1>
-<p>Fuck me it's <s:property value="#session.user.username" />!</p>
+<h1>Home - Student</h1>
+
 <ul>
     <li><s:property value="#session.user.firstName" /></li>
     <li><s:property value="#session.user.lastName" /></li>
