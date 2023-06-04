@@ -1,8 +1,8 @@
 -- passwords are the same text as the username
 -- any primary key with 'ID' in it may be changed to have this increment automatically
 
-SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username
-WHERE Staff.username != 'manager1' AND (UserIssue.issueID != 1 OR UserIssue.issueID IS NULL)
+-- SELECT Staff.username FROM Staff LEFT JOIN UserIssue ON Staff.username = UserIssue.username
+-- WHERE Staff.username != 'manager1' AND (UserIssue.issueID != 1 OR UserIssue.issueID IS NULL)
 
 -- SELECT managerFlag FROM Staff WHERE username = 'manager1'
 
@@ -13,6 +13,7 @@ WHERE Staff.username != 'manager1' AND (UserIssue.issueID != 1 OR UserIssue.issu
 -- ALTER ROLE db_datareader ADD MEMBER user1;
 -- ALTER ROLE db_datawriter ADD MEMBER user1;
 
+DROP TABLE IF EXISTS StaffIssue
 DROP TABLE IF EXISTS UserIssue
 DROP TABLE IF EXISTS IssueKeyword
 DROP TABLE IF EXISTS Keyword
@@ -26,140 +27,141 @@ DROP TABLE IF EXISTS [User]
 
 
 CREATE TABLE [User] (
-    username VARCHAR(50),
-    passwordHash VARCHAR(255) NOT NULL,
-    firstName VARCHAR(50) NOT NULL,
-    lastName VARCHAR(50) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    contactNumber VARCHAR(20) NOT NULL,
-    role VARCHAR(32) DEFAULT 'student' NOT NULL,
+                        username VARCHAR(50),
+                        passwordHash VARCHAR(255) NOT NULL,
+                        firstName VARCHAR(50) NOT NULL,
+                        lastName VARCHAR(50) NOT NULL,
+                        email VARCHAR(255) NOT NULL,
+                        contactNumber VARCHAR(20) NOT NULL,
+                        role VARCHAR(32) DEFAULT 'student' NOT NULL,
 
-    CHECK (role = 'student' OR role = 'staff'),
+                        CHECK (role = 'student' OR role = 'staff'),
 
-    PRIMARY KEY (username)
+                        PRIMARY KEY (username)
 )
 
 CREATE TABLE Student (
-    username VARCHAR(50),
-    studentNumber VARCHAR(10) NOT NULL,
+                         username VARCHAR(50),
+                         studentNumber VARCHAR(10) NOT NULL,
 
-    PRIMARY KEY (username),
+                         PRIMARY KEY (username),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE CASCADE
+                         FOREIGN KEY (username) REFERENCES [User](username)
+                             ON UPDATE CASCADE ON DELETE CASCADE
 )
 
 CREATE TABLE Staff (
-    username VARCHAR(50),
-    staffNumber VARCHAR(10) NOT NULL,
-    managerFlag BIT DEFAULT 0 NOT NULL,
+                       username VARCHAR(50),
+                       staffNumber VARCHAR(10) NOT NULL,
+                       managerFlag BIT DEFAULT 0 NOT NULL,
 
-    PRIMARY KEY (username),
+                       PRIMARY KEY (username),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE CASCADE
+                       FOREIGN KEY (username) REFERENCES [User](username)
+                           ON UPDATE CASCADE ON DELETE CASCADE
 )
 
 CREATE TABLE Issue (
-    issueID INT IDENTITY(1,1),
-    title VARCHAR(100) NOT NULL,
-    category VARCHAR(8) NOT NULL,
-    status VARCHAR(32) DEFAULT 'New' NOT NULL,
-    description VARCHAR(1000) NOT NULL,
-    resolutionDetails VARCHAR(1000),
-    dateTimeReported DATETIME NOT NULL,
-    dateTimeResolved DATETIME,
+                       issueID INT IDENTITY(1,1),
+                       title VARCHAR(100) NOT NULL,
+                       category VARCHAR(8) NOT NULL,
+                       status VARCHAR(32) DEFAULT 'New' NOT NULL,
+                       description VARCHAR(1000) NOT NULL,
+                       resolutionDetails VARCHAR(1000),
+                       dateTimeReported DATETIME NOT NULL,
+                       dateTimeResolved DATETIME,
 
-    CHECK (category = 'Network' OR category = 'Software' OR category = 'Hardware'
-            OR category = 'Email' OR category = 'Account'),
-    CHECK (status = 'New' OR status = 'In Progress' OR status = 'Waiting on Third Party' OR 'Waiting on Reporter'
-            OR status = 'Completed' OR status = 'Not Accepted' OR status = 'Resolved'),
+                       CHECK (category = 'Network' OR category = 'Software' OR category = 'Hardware'
+                           OR category = 'Email' OR category = 'Account'),
+                       CHECK (status = 'New' OR status = 'In Progress' OR status = 'Waiting on Third Party' OR status = 'Waiting on Reporter'
+                           OR status = 'Completed' OR status = 'Not Accepted' OR status = 'Resolved'),
 
-    PRIMARY KEY (issueID)
+                       PRIMARY KEY (issueID)
 )
 
 CREATE TABLE Comment (
-    commentID INT IDENTITY(1,1),
-    comment VARCHAR(250) NOT NULL,
-    dateTimePosted DATETIME NOT NULL,
-    username VARCHAR(50) NOT NULL,
-    issueID INT NOT NULL,
+                         commentID INT IDENTITY(1,1),
+                         comment VARCHAR(250) NOT NULL,
+                         dateTimePosted DATETIME NOT NULL,
+                         username VARCHAR(50) NOT NULL,
+                         issueID INT NOT NULL,
 
-    PRIMARY KEY (commentID),
+                         PRIMARY KEY (commentID),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                         FOREIGN KEY (username) REFERENCES [User](username)
+                             ON UPDATE CASCADE ON DELETE NO ACTION,
+                         FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                             ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 CREATE TABLE Notification (
-    notificationID INT IDENTITY(1,1),
-    message VARCHAR(100) NOT NULL,
-    dateTimeSent DATETIME NOT NULL,
-    username VARCHAR(50) NOT NULL,
-    issueID INT NOT NULL,
-	hasSeen BIT NOT NULL DEFAULT 0,
+                              notificationID INT IDENTITY(1,1),
+                              message VARCHAR(100) NOT NULL,
+                              dateTimeSent DATETIME NOT NULL,
+                              username VARCHAR(50) NOT NULL,
+                              issueID INT NOT NULL,
+                              hasSeen BIT NOT NULL DEFAULT 0,
 
-    PRIMARY KEY (notificationID),
+                              PRIMARY KEY (notificationID),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                              FOREIGN KEY (username) REFERENCES [User](username)
+                                  ON UPDATE CASCADE ON DELETE NO ACTION,
+                              FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                                  ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 CREATE TABLE Keyword (
-    keywordID INT IDENTITY(1,1),
-    keyword VARCHAR(50) NOT NULL,
+                         keywordID INT IDENTITY(1,1),
+                         keyword VARCHAR(50) NOT NULL,
 
-    PRIMARY KEY (keywordID)
+                         PRIMARY KEY (keywordID)
 )
 
 CREATE TABLE KnowledgeBaseArticle (
-    articleID INT IDENTITY(1,1),
-    issueID INT NOT NULL,
+                                      articleID INT IDENTITY(1,1),
+                                      issueID INT NOT NULL,
+                                      viewCount INT NOT NULL DEFAULT 0,
 
-    PRIMARY KEY (articleID),
+                                      PRIMARY KEY (articleID),
 
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                                      FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                                          ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 CREATE TABLE UserIssue (
-    username VARCHAR(50),
-    issueID INT,
+                           username VARCHAR(50),
+                           issueID INT,
 
-    PRIMARY KEY (username, issueID),
+                           PRIMARY KEY (username, issueID),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                           FOREIGN KEY (username) REFERENCES [User](username)
+                               ON UPDATE CASCADE ON DELETE NO ACTION,
+                           FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                               ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 CREATE TABLE IssueKeyword (
-    issueID INT,
-    keywordID INT,
+                              issueID INT,
+                              keywordID INT,
 
-    PRIMARY KEY (issueID, keywordID),
+                              PRIMARY KEY (issueID, keywordID),
 
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (keywordID) REFERENCES Keyword(keywordID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                              FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                                  ON UPDATE CASCADE ON DELETE NO ACTION,
+                              FOREIGN KEY (keywordID) REFERENCES Keyword(keywordID)
+                                  ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 CREATE TABLE StaffIssue (
-    username VARCHAR(50),
-    issueID INT,
+                            username VARCHAR(50),
+                            issueID INT,
 
-    PRIMARY KEY (username, issueID),
+                            PRIMARY KEY (username, issueID),
 
-    FOREIGN KEY (username) REFERENCES [User](username)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (issueID) REFERENCES Issue(issueID)
-        ON UPDATE CASCADE ON DELETE NO ACTION
+                            FOREIGN KEY (username) REFERENCES [User](username)
+                                ON UPDATE CASCADE ON DELETE NO ACTION,
+                            FOREIGN KEY (issueID) REFERENCES Issue(issueID)
+                                ON UPDATE CASCADE ON DELETE NO ACTION
 )
 
 
