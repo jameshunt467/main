@@ -14,7 +14,7 @@ public class DBUtil {
             InitialContext initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:comp/env/dbConnection");
         } catch (NamingException e) {
-            // Log error or do something with exception
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

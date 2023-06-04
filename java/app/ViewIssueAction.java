@@ -1,8 +1,6 @@
 package app;
 
-import com.opensymphony.xwork2.ActionSupport;
-import app.BaseAction;
-import app.IssueBean;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class for viewing details of a specific issue
 public class ViewIssueAction extends BaseAction {
+
     private List<String> staffMembers = new ArrayList<>();
     private String currentlyAssigned = null;
     private boolean isManager = false;
@@ -19,6 +19,7 @@ public class ViewIssueAction extends BaseAction {
     private IssueBean issue;
     private String keyword;
 
+    // Getters and setters
     public String getKeyword() { return keyword; }
     public int getIssueID() { return this.issueID; }
     public IssueBean getIssue() { return issue; }
@@ -31,11 +32,15 @@ public class ViewIssueAction extends BaseAction {
     public void setIssue(IssueBean issue) { this.issue = issue; }
     public void setIsManager(boolean state) { this.isManager = state; }
 
+    // Executes the view issue action
     public String execute() throws Exception {
+        // Handling session errors
         handleSessionErrors();
 
         try (Connection connection = DBUtil.getConnection()) {
+            // Checking the role of the user and fetching assigned staff
             checkUserAndFetchAssignedStaff(connection);
+            // Fetching the details of the issue
             fetchIssueDetails(connection);
         }
 
@@ -43,11 +48,13 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void handleSessionErrors() {
+        // Handling errors for 'comment' and 'keyword' fields
         handleSessionError("commentError", "comment");
         handleSessionError("error", "keyword");
     }
 
     private void handleSessionError(String sessionKey, String field) {
+        // If there's an error in the session for the given field, we add a field error and remove it from the session
         if (session.containsKey(sessionKey)) {
             String errorMessage = (String) session.get(sessionKey);
             this.addFieldError(field, errorMessage);
@@ -56,6 +63,7 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void checkUserAndFetchAssignedStaff(Connection connection) throws SQLException {
+        // Check if the user is a manager and fetch the staff members
         String sql = "SELECT managerFlag FROM Staff WHERE username = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -72,34 +80,44 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void fetchStaffMembers(Connection connection) throws SQLException {
-        PreparedStatement stmt;
-        ResultSet rs;
-
-
+        // Fetch the staff members and the staff member currently assigned to the issue
         String sql = "SELECT username FROM Staff";
 
-        stmt = connection.prepareStatement(sql);
-        rs = stmt.executeQuery();
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-        while (rs.next()) {
-            staffMembers.add(rs.getString("username"));
+            while (rs.next()) {
+                staffMembers.add(rs.getString("username"));
+            }
         }
 
         // Fetch the current assigned user for this issue
         sql = "SELECT username FROM StaffIssue WHERE issueID = ?";
-        stmt = connection.prepareStatement(sql);
-        stmt.setInt(1, issueID);
-        rs = stmt.executeQuery();
 
-        if(rs.next()) {
-            currentlyAssigned = rs.getString("username");
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
+
+            try (ResultSet rsStaffIssue = stmt.executeQuery()) {
+                if(rsStaffIssue.next()) {
+                    currentlyAssigned = rsStaffIssue.getString("username");
+                }
+            }
         }
-
-        rs.close();
-        stmt.close();
     }
 
+    private void incrementKnowledgeBaseArticleViewCount(Connection connection) throws SQLException {
+        // Increment the view count of the knowledge base article
+        String sql = "UPDATE KnowledgeBaseArticle SET viewCount = viewCount + 1 WHERE issueID = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, issueID);
+            stmt.executeUpdate();
+        }
+    }
+
+
     private void fetchIssueDetails(Connection connection) throws SQLException {
+        // Fetch the details of the issue
         String sql = "SELECT * FROM Issue WHERE issueID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -108,7 +126,10 @@ public class ViewIssueAction extends BaseAction {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     setIssueDetails(rs);
-                    issue.setInKnowledgeBase(checkIfInKnowledgeBase(connection));
+                    if(checkIfInKnowledgeBase(connection)) {
+                        issue.setInKnowledgeBase(true);
+                        incrementKnowledgeBaseArticleViewCount(connection); // Call the method here
+                    }
                     fetchComments(connection);
                     fetchKeywords(connection);
                     insertKeyword(connection);
@@ -117,7 +138,9 @@ public class ViewIssueAction extends BaseAction {
         }
     }
 
+
     private void setIssueDetails(ResultSet rs) throws SQLException {
+        // Set the issue details
         issue = new IssueBean();
         issue.setIssueID(rs.getString("issueID"));
         issue.setTitle(rs.getString("title"));
@@ -130,6 +153,7 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void fetchComments(Connection connection) throws SQLException {
+        // Fetch the comments for the issue
         String sql = "SELECT * FROM Comment WHERE issueID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -148,6 +172,7 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private boolean checkIfInKnowledgeBase(Connection connection) throws SQLException {
+        // Check if the issue is in the knowledge base
         String sql = "SELECT issueID FROM KnowledgeBaseArticle WHERE issueID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -160,6 +185,7 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void fetchKeywords(Connection connection) throws SQLException {
+        // Fetch the keywords for the issue
         String sql = "SELECT k.keywordID, k.keyword FROM IssueKeyword ik JOIN Keyword k ON ik.keywordID = k.keywordID WHERE ik.issueID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -177,6 +203,7 @@ public class ViewIssueAction extends BaseAction {
     }
 
     private void insertKeyword(Connection connection) throws SQLException {
+        // Insert a keyword for the issue
         if(keyword != null && !keyword.isEmpty()) {
             String sql = "INSERT INTO Keyword (keyword) VALUES (?)";
 

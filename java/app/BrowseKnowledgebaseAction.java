@@ -1,7 +1,6 @@
 package app;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -74,7 +73,12 @@ public class BrowseKnowledgebaseAction extends ActionSupport {
 
         try (Connection connection = DBUtil.getConnection()) {
 
-            String sql = "SELECT i.*, k.keyword, k.keywordID FROM Issue i LEFT JOIN issueKeyword ik ON i.issueID = ik.issueID LEFT JOIN keyword k ON ik.keywordID = k.keywordID WHERE i.title LIKE ? OR i.description LIKE ? OR k.keyword LIKE ? ORDER BY i.issueID";
+            String sql = "SELECT i.*, k.keyword, k.keywordID FROM Issue i " +
+                    "INNER JOIN KnowledgeBaseArticle kba ON i.issueID = kba.issueID " +
+                    "LEFT JOIN issueKeyword ik ON i.issueID = ik.issueID " +
+                    "LEFT JOIN keyword k ON ik.keywordID = k.keywordID " +
+                    "WHERE (i.title LIKE ? OR i.description LIKE ? OR k.keyword LIKE ?) " +
+                    "ORDER BY i.issueID";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, "%" + this.search + "%");

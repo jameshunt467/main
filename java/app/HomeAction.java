@@ -7,22 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HomeAction extends ActionSupport {
-
     private List<NotificationBean> notifications = new ArrayList<>();
     private ArrayList<IssueBean> issueList = new ArrayList<>();
 
-    public List<NotificationBean> getNotifications() {
-        return notifications;
-    }
+    // Getters
+    public List<NotificationBean> getNotifications() { return notifications; }
+    public ArrayList<IssueBean> getIssueList() { return issueList; }
 
-    public ArrayList<IssueBean> getIssueList() {
-        return issueList;
-    }
-
-    public String execute() throws Exception {
+    public String execute() {
         UserBean user = (UserBean) ActionContext.getContext().getSession().get("user");
 
         if(user == null) {
@@ -35,31 +29,27 @@ public class HomeAction extends ActionSupport {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, user.getUsername());
 
-            try(ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    NotificationBean notification = new NotificationBean();
-                    notification.setNotificationID(rs.getInt("notificationID"));
-                    notification.setMessage(rs.getString("message"));
-                    notification.setDateTimeSent(rs.getString("dateTimeSent"));
-                    notification.setUsername(rs.getString("username"));
-                    notification.setIssueID(rs.getInt("issueID"));
-                    notification.setHasSeen(rs.getBoolean("hasSeen"));
-                    notifications.add(notification);
-                }
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                NotificationBean notification = new NotificationBean();
+                notification.setNotificationID(rs.getInt("notificationID"));
+                notification.setMessage(rs.getString("message"));
+                notification.setDateTimeSent(rs.getString("dateTimeSent"));
+                notification.setUsername(rs.getString("username"));
+                notification.setIssueID(rs.getInt("issueID"));
+                notification.setHasSeen(rs.getBoolean("hasSeen"));
+                notifications.add(notification);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ERROR;
         }
 
         // Gather the issues
         try (Connection connection = DBUtil.getConnection()) {
-            String sql;
-
-            if (Objects.equals(user.role, "staff")) {
-                sql = "SELECT i.* FROM Issue i JOIN StaffIssue ui ON i.issueID = ui.issueID WHERE ui.username = ? AND i.issueID NOT IN (SELECT issueID FROM KnowledgeBaseArticle)";
-            } else {
-                sql = "SELECT i.* FROM Issue i JOIN UserIssue ui ON i.issueID = ui.issueID WHERE ui.username = ?";
-            }
-
-            System.out.println(sql);
+            String sql = user.role.equals("staff")
+                    ? "SELECT i.* FROM Issue i JOIN StaffIssue ui ON i.issueID = ui.issueID WHERE ui.username = ? AND i.issueID NOT IN (SELECT issueID FROM KnowledgeBaseArticle)"
+                    : "SELECT i.* FROM Issue i JOIN UserIssue ui ON i.issueID = ui.issueID WHERE ui.username = ?";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, user.getUsername());
@@ -77,6 +67,9 @@ public class HomeAction extends ActionSupport {
                 issue.setDateTimeResolved(resultSet.getString("dateTimeResolved"));
                 issueList.add(issue);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ERROR;
         }
 
         return SUCCESS;

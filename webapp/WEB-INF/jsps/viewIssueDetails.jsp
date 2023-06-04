@@ -125,11 +125,14 @@
                     <s:submit value="Update Status" align="center" class="submitStatusButton"/>
                 </s:if>
                 <!-- If user is student, allow status to be set to Resolved if not already completed -->
-                <s:if test="#session.user.role == 'student' && issue.status != 'Completed'">
-                    <s:submit name="newStatus" value="Resolved" id="issueStatusUser" cssClass="form-control"/>
+                <s:if test="#session.user.role == 'student' && issue.status == 'Resolved'" >
+
                 </s:if>
+                <s:elseif test="#session.user.role == 'student' && issue.status != 'Completed'">
+                    <s:submit name="newStatus" value="Resolved" id="issueStatusUser" cssClass="form-control"/>
+                </s:elseif>
                 <!-- If user is student and issue is completed, allow status to be Not Accepted or Resolved -->
-                <s:else>
+                <s:elseif test="#session.user.role == 'student'">
                     <s:select name="newStatus"
                               list="{'Not Accepted', 'Resolved'}"
                               value="%{issue.status}"
@@ -138,7 +141,7 @@
                               id="issueStatusUserRes"
                               cssClass="form-control"/>
                     <s:submit value="Update Status" align="center" class="submitStatusButton"/>
-                </s:else>
+                </s:elseif>
             </s:form>
         </div>
     </s:if>
@@ -148,6 +151,7 @@
         Issue ID: <s:property value="issue.issueID"/><br>
         Category: <s:property value="issue.category"/><br>
         Status: <s:property value="issue.status"/><br>
+        Description: <s:property value="issue.description"/><br>
         Resolution Details: <s:property value="issue.resolutionDetails"/><br>
         Reported Date: <s:property value="issue.dateTimeReported"/><br>
         Resolved Date: <s:property value="issue.dateTimeResolved"/><br>

@@ -28,24 +28,19 @@
 
 <s:iterator value="issueList">
     <div class="flexItem">
-    <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
-
+        <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
             <p>
-<%--                Issue ID: <s:property value="issueID"/><br>--%>
                 <h3>Title: <s:property value="title"/><br></h3>
                 Category: <s:property value="category"/><br>
                 Status: <s:property value="status"/><br>
                 Description: <s:property value="description"/><br>
-                Resolution Details: <s:property value="resolutionDetails"/><br>
-                Reported Date: <s:property value="dateTimeReported"/><br>
-                Resolved Date: <s:property value="dateTimeResolved"/><br>
                 Keywords:
                 <s:iterator value="keywords">
                     <s:property value="keyword"/>,
                 </s:iterator>
             </p>
-        </div>
-    </a>
+        </a>
+    </div>
 </s:iterator>
 <s:if test="issueList.size() == 0">
     <p>No issues found</p>

@@ -56,9 +56,8 @@
                 <s:else>
                     <div class="notification-box">
                 </s:else>
-                    <p><span class="notification-property">Notification ID:</span> <span class="notification-value"><s:property value="notificationID" /></span></p>
                     <p><span class="notification-property">Message:</span> <span class="notification-value"><s:property value="message" /></span></p>
-                    <p><span class="notification-property">DateTime Sent:</span> <span class="notification-value"><s:property value="dateTimeSent" /></span></p>
+                    <p><span class="notification-property">Date & Time Sent:</span> <span class="notification-value"><s:property value="dateTimeSent" /></span></p>
                     <s:if test="!hasSeen">
                         <s:form action="markNotificationAsSeen">
                             <s:hidden name="notificationID" value="%{notificationID}" />
@@ -79,6 +78,7 @@
             </div>
         </s:else>
     </div>
+</div>
 </div>
 
 </body>

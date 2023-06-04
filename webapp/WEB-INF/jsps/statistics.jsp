@@ -16,25 +16,24 @@
 <body>
 <div class="flexContainer2">
     <div class="flexItem">
-<p>No. of issues in each category <s:property value="totalCategoryIssues" /> </p>
+<p>No. of issues in each category: <s:property value="totalCategoryIssues" /> </p>
     </div>
 
         <div class="flexItem">
-<p>No. of issues in each status <s:property value="totalStatusIssues" /></p>
+<p>No. of issues in each status: <s:property value="totalStatusIssues" /></p>
         </div>
             <div class="flexItem">
-<p>No. of issues assigned to each staff <s:property value="StaffAssignedIssues" /></p>
+<p>No. of issues assigned to each staff: <s:property value="StaffAssignedIssues" /></p>
             </div>
                 <div class="flexItem">
-<p>Average time to resolution last 30 days <s:property value="formattedTimeToResolve" /></p>
+<p>Average time to resolution last 30 days: <s:property value="formattedTimeToResolve" /></p>
                 </div>
                     <div class="flexItem">
-<p>5 Longest Unresolved Issues</p>
+<p>5 Longest Unresolved Issues: </p>
 <s:iterator value="longestIssues">
     <a href="<s:url action='viewIssueAction'><s:param name='issueID' value='%{issueID}' /></s:url>">
         <div class="individualIssue">
             <p>
-                Issue ID: <s:property value="issueID"/><br>
                 Title: <s:property value="title"/><br>
                 Category: <s:property value="category"/><br>
                 Status: <s:property value="status"/><br>
@@ -48,8 +47,13 @@
 </s:iterator>
                     </div>
     <div class="flexItem">
-<p>Knowledgebase </p>
-<p></p>
+        <p>Knowledgebase Counts:</p>
+        <s:iterator value="knowledgeBaseArticleCounts" status="stat">
+            <p>
+                Issue: <s:property value="key" />
+                Views: <s:property value="value" />
+            </p>
+        </s:iterator>
     </div>
 
 </div>

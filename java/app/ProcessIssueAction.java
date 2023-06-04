@@ -2,26 +2,21 @@ package app;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ActionContext;
-
-import javax.sql.*;
 import java.sql.*;
-import javax.naming.InitialContext;
-import org.apache.struts2.interceptor.SessionAware; // retrieve session
-import java.util.Map;                               // retrieve session
-import java.time.LocalDateTime;                     // db input
-
-// Conains the logic for processing form submission
+import org.apache.struts2.interceptor.SessionAware;
+import java.util.Map;
+import java.time.LocalDateTime;
 
 public class ProcessIssueAction extends ActionSupport implements SessionAware {
 
     private Map<String, Object> session;
-    private String issueDescription;    // Field in 'submit-issue' jsp
+    private String issueDescription;
     private String issueTitle;
     private String issueCategory;
     private LocalDateTime dateTimeReported;
-    private int issueID;             // This is the ID of the issue that was just processed
+    private int issueID;
 
-    // getter and setter for issueDescription
+    // Getter and setter methods for each field
     public int getIssueID() { return issueID; }
     public String getIssueDescription() { return issueDescription; }
     public String getIssueTitle() { return issueTitle; }
@@ -33,9 +28,9 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
     public void setIssueCategory(String issueCategory) { this.issueCategory = issueCategory; }
 
     @Override
-    public String execute() throws Exception {
-        // create connection
+    public String execute() {
         try (Connection con = DBUtil.getConnection()) {
+            // Retrieve the current student from the session
             StudentBean student = (StudentBean) ActionContext.getContext().getSession().get("user");
             String username = student.getUsername();
 
@@ -44,28 +39,29 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
                 addActionError("Invalid category. Must be one of: Network, Software, Hardware, Email, Account");
                 return ERROR;
             }
-            // create a statement
+
+            // Create a statement for inserting the new issue into the database
             PreparedStatement stmtIssue = con.prepareStatement(
-                "INSERT INTO Issue (title, category, status, description, dateTimeReported) VALUES (?, ?, 'New', ?, ?)", Statement.RETURN_GENERATED_KEYS
+                    "INSERT INTO Issue (title, category, status, description, dateTimeReported) VALUES (?, ?, 'New', ?, ?)", Statement.RETURN_GENERATED_KEYS
             );
 
             stmtIssue.setString(1, issueTitle);
             stmtIssue.setString(2, issueCategory);
             stmtIssue.setString(3, issueDescription);
-            stmtIssue.setObject(4, LocalDateTime.now()); // current time as dateTimeReported (closest match to SQL.DATETIME, could change to TIMESTAMP)
+            stmtIssue.setObject(4, LocalDateTime.now()); // current time as dateTimeReported
 
-            // execute the query
+            // Execute the query
             stmtIssue.executeUpdate();
 
             // Retrieve the generated key (the new issue ID)
             try(ResultSet generatedKeys = stmtIssue.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int issueId = generatedKeys.getInt(1);
-                    this.issueID = issueId; // Store the issueID to view it
+                    this.issueID = issueId;
 
                     // Now we insert into UserIssue
                     PreparedStatement stmtUserIssue = con.prepareStatement(
-                        "INSERT INTO UserIssue (username, issueID) VALUES (?, ?)"
+                            "INSERT INTO UserIssue (username, issueID) VALUES (?, ?)"
                     );
 
                     stmtUserIssue.setString(1, username);
@@ -83,10 +79,10 @@ public class ProcessIssueAction extends ActionSupport implements SessionAware {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            addActionError("An error occurred when processing the issue.");
             return ERROR;
         }
     }
-
 
     @Override
     public void setSession(Map<String, Object> session) {
